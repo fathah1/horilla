@@ -78,6 +78,8 @@ def generate_payslip(date, companies, all):
         data["end_date"] = payslip_data["end_date"]
         data["status"] = "draft"
         data["contract_wage"] = payslip_data["contract_wage"]
+        data["contract_wage_HRA"] = payslip_data["contract_wage_HRA"]
+        data["contract_wage_other_allowances"] = payslip_data["contract_wage_other_allowances"]
         data["basic_pay"] = payslip_data["basic_pay"]
         data["gross_pay"] = payslip_data["gross_pay"]
         data["deduction"] = payslip_data["total_deductions"]

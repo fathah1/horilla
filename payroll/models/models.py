@@ -179,7 +179,14 @@ class Contract(HorillaModel):
         default="monthly",
         verbose_name=_("Pay Frequency"),
     )
+
     wage = models.FloatField(verbose_name=_("Basic Salary"), null=True, default=0)
+
+    wage_HRA = models.FloatField(verbose_name=_("HRA"), null=True, default=0)
+
+    wage_other_allowances = models.FloatField(verbose_name=_("Other Allowances"), null=True, default=0)
+    
+
     filing_status = models.ForeignKey(
         FilingStatus,
         on_delete=models.PROTECT,
@@ -367,7 +374,29 @@ class Contract(HorillaModel):
                 logger.error((f"Failed to convert wage '{self.wage}' to an integer."))
             except Exception as e:
                 logger.error(f"An unexpected error occurred: {e}")
-        return self
+
+        if self.contract_status == "active" and self.wage_HRA is not None:
+            try:
+                wage_hra = int(self.wage_HRA)
+                work_info = self.employee_id.employee_work_info
+                work_info.HRA = wage_hra
+                work_info.save()
+            except ValueError:
+                logger.error((f"Failed to convert wage '{self.wage_HRA}' to an integer."))
+            except Exception as e:
+                logger.error(f"An unexpected error occurred: {e}")
+
+        if self.contract_status == "active" and self.wage_other_allowances is not None:
+            try:
+                wage_oa = int(self.wage_other_allowances)
+                work_info = self.employee_id.employee_work_info
+                work_info.other_allowances = wage_oa
+                work_info.save()
+            except ValueError:
+                logger.error((f"Failed to convert wage '{self.wage_other_allowances}' to an integer."))
+            except Exception as e:
+                logger.error(f"An unexpected error occurred: {e}")
+            return self
 
     class Meta:
         """
@@ -1362,13 +1391,15 @@ class Payslip(HorillaModel):
     end_date = models.DateField()
     pay_head_data = models.JSONField()
     contract_wage = models.FloatField(null=True, default=0)
+    contract_wage_HRA = models.FloatField(null=True, default=0)
+    contract_wage_other_allowances = models.FloatField(null=True, default=0)
     basic_pay = models.FloatField(null=True, default=0)
+    basic_pay_HRA = models.FloatField(null=True, default=0)
+    basic_pay_other_allowances = models.FloatField(null=True, default=0)
     gross_pay = models.FloatField(null=True, default=0)
     deduction = models.FloatField(null=True, default=0)
     net_pay = models.FloatField(null=True, default=0)
-    status = models.CharField(
-        max_length=20, null=True, default="draft", choices=status_choices
-    )
+    status = models.CharField(max_length=20, null=True, default="draft", choices=status_choices)
     sent_to_employee = models.BooleanField(null=True, default=False)
     objects = HorillaCompanyManager("employee_id__employee_work_info__company_id")
     installment_ids = models.ManyToManyField(Deduction, editable=False)

@@ -114,21 +114,15 @@ WSGI_APPLICATION = "horilla.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if env("DATABASE_URL", default=None):
-    DATABASES = {
-        "default": env.db(),
-    }
-else:
-    DATABASES = {
+# if env("DATABASE_URL", default=None):
+#     DATABASES = {
+#         "default": env.db(),
+#     }
+# else:
+DATABASES = {
         "default": {
             "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
-            "NAME": env(
-                "DB_NAME",
-                default=os.path.join(
-                    BASE_DIR,
-                    "TestDB_Horilla.sqlite3",
-                ),
-            ),
+            "NAME":   env( "DB_NAME",default=os.path.join(BASE_DIR,"DB_Horilla.sqlite3"),),
             "USER": env("DB_USER", default=""),
             "PASSWORD": env("DB_PASSWORD", default=""),
             "HOST": env("DB_HOST", default=""),

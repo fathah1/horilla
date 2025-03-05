@@ -307,6 +307,8 @@ class EmployeeWorkInformationForm(ModelForm):
             "contract_end_date",
             "tags",
             "basic_salary",
+            "HRA",
+            "other_allowances",
             "salary_hour",
         )
         exclude = ("employee_id",)

@@ -215,9 +215,12 @@ def calculate_gross_pay(*_args, **kwargs):
 
     """
     basic_pay = kwargs["basic_pay"]
+    basic_pay_HRA = kwargs["basic_pay_HRA"]
+    basic_pay_other_allowances = kwargs["basic_pay_other_allowances"]
+    
     total_allowance = kwargs["total_allowance"]
     # basic_pay = compute_salary_on_period(employee, start_date, end_date)["basic_pay"]
-    gross_pay = total_allowance + basic_pay
+    gross_pay = total_allowance + basic_pay + basic_pay_HRA + basic_pay_other_allowances
 
     employee, start_date, end_date = (
         kwargs[key] for key in ("employee", "start_date", "end_date")

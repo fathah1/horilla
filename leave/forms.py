@@ -173,6 +173,30 @@ class LeaveTypeForm(ConditionForm):
         label="Employee",
     )
 
+    leave_allowance = forms.MultipleChoiceField(
+        choices=[
+            ("HRA", "HRA"),
+            ("Other Allowances", "Other Allowances")
+        ],
+        widget=forms.SelectMultiple(
+            attrs={
+                "class": "oh-select oh-select-2 mb-2",
+                "required": False
+            }
+        ),
+        label="Allowance",
+        required=False,
+    )
+
+
+    # allowance_id = HorillaMultiSelectField(
+    #     queryset= Allowance.objects.all(),
+    #     widget=HorillaMultiSelectWidget(
+    #         required=False,
+    #     ),
+    #     label="Allowance",
+    # )
+
     class Meta:
         model = LeaveType
         fields = "__all__"
@@ -201,6 +225,22 @@ class LeaveTypeForm(ConditionForm):
             cleaned_data["reset_month"] = "1"
             cleaned_data["reset_day"] = "1"
 
+        
+        payment = cleaned_data.get("payment")
+        leave_allowance = cleaned_data.get("leave_allowance")
+
+
+        if payment == "paid" and not leave_allowance:
+                 raise ValidationError(
+                    {
+                        "leave_allowance": _(
+                            "Allowance Required for Paid Leave"
+                        )
+                    }
+                )
+
+    
+
         return cleaned_data
 
     def save(self, *args, **kwargs):
@@ -219,6 +259,22 @@ class LeaveTypeForm(ConditionForm):
 
 
 class UpdateLeaveTypeForm(ConditionForm):
+
+
+    leave_allowance = forms.MultipleChoiceField(
+        choices=[
+            ("HRA", "HRA"),
+            ("Other Allowances", "Other Allowances")
+        ],
+        widget=forms.SelectMultiple(
+            attrs={
+                "class": "oh-select oh-select-2 mb-2",
+                "required": False
+            }
+        ),
+        label="Allowance",
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super(UpdateLeaveTypeForm, self).__init__(*args, **kwargs)
@@ -261,6 +317,20 @@ class UpdateLeaveTypeForm(ConditionForm):
             cleaned_data["reset_based"] = "yearly"
             cleaned_data["reset_month"] = "1"
             cleaned_data["reset_day"] = "1"
+
+
+
+        payment = cleaned_data.get("payment")
+        leave_allowance = cleaned_data.get("leave_allowance")
+
+        if payment == "paid" and not leave_allowance:
+            raise ValidationError(
+            {
+                "leave_allowance": _(
+                    "Allowance Required for Paid Leave"
+                )
+            }
+        )
 
         return cleaned_data
 

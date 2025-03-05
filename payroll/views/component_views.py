@@ -119,17 +119,27 @@ def payroll_calculation(employee, start_date, end_date):
 
     basic_pay_details = compute_salary_on_period(employee, start_date, end_date)
     contract = basic_pay_details["contract"]
+
     contract_wage = basic_pay_details["contract_wage"]
+    contract_wage_HRA = basic_pay_details["contract_wage_HRA"]
+    contract_wage_other_allowances = basic_pay_details["contract_wage_other_allowances"]
+
+
+    
     basic_pay = basic_pay_details["basic_pay"]
+    basic_pay_HRA = basic_pay_details["basic_pay_HRA"]
+    basic_pay_other_allowances = basic_pay_details["basic_pay_other_allowances"]
+
     loss_of_pay = basic_pay_details["loss_of_pay"]
+    loss_of_pay_HRA = basic_pay_details["loss_of_pay_HRA"]
+    loss_of_pay_other_allowances= basic_pay_details["loss_of_pay_other_allowances"]
     paid_days = basic_pay_details["paid_days"]
     unpaid_days = basic_pay_details["unpaid_days"]
 
     working_days_details = basic_pay_details["month_data"]
 
-    updated_basic_pay_data = update_compensation_deduction(
-        employee, basic_pay, "basic_pay", start_date, end_date
-    )
+    updated_basic_pay_data = update_compensation_deduction(employee, basic_pay, "basic_pay", start_date, end_date)
+    
     basic_pay = updated_basic_pay_data["compensation_amount"]
     basic_pay_deductions = updated_basic_pay_data["deductions"]
 
@@ -144,6 +154,8 @@ def payroll_calculation(employee, start_date, end_date):
         "start_date": start_date,
         "end_date": end_date,
         "basic_pay": basic_pay,
+        "basic_pay_HRA": basic_pay_HRA,
+        "basic_pay_other_allowances": basic_pay_other_allowances,
         "day_dict": working_days_details,
     }
     # basic pay will be basic_pay = basic_pay - update_compensation_amount
@@ -221,7 +233,11 @@ def payroll_calculation(employee, start_date, end_date):
     payslip_data = {
         "employee": employee,
         "contract_wage": contract_wage,
+        "contract_wage_HRA": contract_wage_HRA,
+        "contract_wage_other_allowances": contract_wage_other_allowances,
         "basic_pay": basic_pay,
+        "basic_pay_other_allowances": basic_pay_other_allowances,
+        "basic_pay_HRA": basic_pay_HRA,
         "gross_pay": gross_pay,
         "taxable_gross_pay": taxable_gross_pay["taxable_gross_pay"],
         "net_pay": net_pay,
@@ -236,6 +252,9 @@ def payroll_calculation(employee, start_date, end_date):
         "net_deductions": net_pay_deduction_list,
         "total_deductions": total_deductions,
         "loss_of_pay": loss_of_pay,
+        "loss_of_pay_HRA": loss_of_pay_HRA,
+        "loss_of_pay_other_allowances": loss_of_pay_other_allowances,
+        "total_loss": loss_of_pay_other_allowances + loss_of_pay_HRA + loss_of_pay,
         "federal_tax": federal_tax,
         "start_date": start_date,
         "end_date": end_date,
@@ -770,7 +789,11 @@ def generate_payslip(request):
                 data["end_date"] = payslip["end_date"]
                 data["status"] = "draft"
                 data["contract_wage"] = payslip["contract_wage"]
+                data["contract_wage_HRA"] = payslip["contract_wage_HRA"]
+                data["contract_wage_other_allowances"] = payslip["contract_wage_other_allowances"]
                 data["basic_pay"] = payslip["basic_pay"]
+                data["basic_pay_HRA"] = payslip["basic_pay_HRA"]
+                data["basic_pay_other_allowances"] = payslip["basic_pay_other_allowances"]
                 data["gross_pay"] = payslip["gross_pay"]
                 data["deduction"] = payslip["total_deductions"]
                 data["net_pay"] = payslip["net_pay"]
@@ -900,6 +923,8 @@ def create_payslip(request, new_post_data=None):
                     else request.GET["status"]
                 )
                 data["contract_wage"] = payslip_data["contract_wage"]
+                data["contract_wage_HRA"] = payslip_data["contract_wage_HRA"]
+                data["contract_wage_other_allowances"] = payslip_data["contract_wage_other_allowances"]
                 data["basic_pay"] = payslip_data["basic_pay"]
                 data["gross_pay"] = payslip_data["gross_pay"]
                 data["deduction"] = payslip_data["total_deductions"]

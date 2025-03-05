@@ -47,6 +47,8 @@ class LeaveTypeFilter(FilterSet):
     total_days_gte = filters.CharFilter(field_name="total_days", lookup_expr="gte")
     total_days_lte = filters.CharFilter(field_name="total_days", lookup_expr="lte")
 
+    leave_allowance = filters.CharFilter(field_name="leave_allowance", lookup_expr="lte")
+
     class Meta:
         """ "
         Meta class defines the model and fields to filter

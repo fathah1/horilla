@@ -632,9 +632,20 @@ class EmployeeWorkInformation(models.Model):
         null=True, blank=True, verbose_name=_("Joining Date")
     )
     contract_end_date = models.DateField(blank=True, null=True)
+
     basic_salary = models.IntegerField(
         null=True, blank=True, default=0, verbose_name=_("Basic Salary")
     )
+
+    HRA = models.IntegerField(
+        null=True, blank=True, default=0, verbose_name=_("HRA")
+    )
+
+    other_allowances = models.IntegerField(
+        null=True, blank=True, default=0, verbose_name=_("Other Allowances")
+    )
+
+
     salary_hour = models.IntegerField(
         null=True, blank=True, default=0, verbose_name=_("Salary Per Hour")
     )

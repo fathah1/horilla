@@ -51,6 +51,20 @@
                   {{form.payment.errors}}
               </div>
           </div>
+
+
+
+          <div class="col-sm-12 col-md-12"  id="allowance-container" style="display: none;">
+            <div class="oh-input-group oh-label__info">
+                <label for="leave_allowance" class="oh-label">{% trans "Select Allowances" %}</label>
+                <span class=" oh-info me-3" title="{% trans 'Choose Allowance types' %}"></span>
+            </div>
+            {{form.leave_allowance}}
+            {{form.leave_allowance.errors}}
+          </div>
+
+
+
           <div class="col-sm-12 col-md-6">
               <div class="oh-input-group oh-label__info justify-content-between">
                   <div class="d-flex align-items-center">
@@ -439,6 +453,14 @@
       }
       $("#id_total_days").val(totalDays);
     });
+
+    $('#id_payment').change(function () {
+            if ($(this).val() === 'paid') {
+                $('#allowance-container').show();
+            } else {
+                $('#allowance-container').hide();
+            }
+    }).trigger('change');
 
     //check the yes or no fields
     if ($('#id_require_approval').val() == 'no') {

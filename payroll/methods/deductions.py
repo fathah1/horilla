@@ -7,9 +7,7 @@ This module is used to compute the deductions of employees
 from payroll.models.models import Deduction
 
 
-def update_compensation_deduction(
-    employee, compensation_amount, compensation_type, start_date, end_date
-):
+def update_compensation_deduction(employee, compensation_amount, compensation_type, start_date, end_date):
     """
     This method is used to update the basic or gross pay
 

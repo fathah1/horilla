@@ -110,6 +110,15 @@ TIME_PERIOD = [("day", _("Day")), ("month", _("Month")), ("year", _("Year"))]
 
 PAYMENT = [("paid", _("Paid")), ("unpaid", _("Unpaid"))]
 
+ALLOWANCES = [
+        ("HRA", "HRA"),
+        ("Other Allowances", "Other Allowances")
+    ]
+
+
+
+
+
 CARRYFORWARD_TYPE = [
     ("no carryforward", _("No Carry Forward")),
     ("carryforward", _("Carry Forward")),
@@ -154,6 +163,7 @@ WEEK_DAYS = [
 
 class LeaveType(HorillaModel):
     icon = models.ImageField(null=True, blank=True, upload_to="leave/leave_icon")
+    leave_allowance = models.JSONField(default=list, blank=True)
     name = models.CharField(max_length=30, null=False)
     color = models.CharField(null=True, max_length=30)
     payment = models.CharField(max_length=30, choices=PAYMENT, default="unpaid")
@@ -335,12 +345,14 @@ class CompanyLeave(HorillaModel):
 
 
 class AvailableLeave(HorillaModel):
+
     employee_id = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE,
         related_name="available_leave",
         verbose_name=_("Employee"),
     )
+
     leave_type_id = models.ForeignKey(
         LeaveType,
         on_delete=models.PROTECT,
@@ -349,6 +361,8 @@ class AvailableLeave(HorillaModel):
         null=True,
         verbose_name=_("Leave type"),
     )
+
+
     available_days = models.FloatField(default=0, verbose_name=_("Available Days"))
     carryforward_days = models.FloatField(
         default=0, verbose_name=_("Carryforward Days")
