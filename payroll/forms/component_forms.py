@@ -394,6 +394,64 @@ class PayslipForm(ModelForm):
         }
 
 
+
+class GratuityForm(ModelForm):
+    """
+    Form for Payslip
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        active_contracts = Contract.objects.filter(contract_status="active")
+        self.fields["employee_id"].choices = [
+            (contract.employee_id.id, contract.employee_id)
+            for contract in active_contracts
+            if contract.employee_id.is_active
+        ]
+        self.fields["employee_id"].widget.attrs.update(
+            {
+                "hx-get": "/payroll/check-contract-start-date",
+                "hx-target": "#contractStartDateDiv",
+                "hx-include": "#payslipCreateForm",
+                "hx-trigger": "change delay:300ms",
+            }
+        )
+        if self.instance.pk is None:
+            self.initial["start_date"] = datetime.date.today().replace(day=1)
+            self.initial["end_date"] = datetime.date.today()
+
+    class Meta:
+        """
+        Meta class for additional options
+        """
+
+        model = payroll.models.models.Payslip
+        fields = [
+            "employee_id",
+            "start_date",
+            "end_date",
+        ]
+        exclude = ["is_active"]
+        widgets = {
+            "start_date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "hx-get": "/payroll/check-contract-start-date",
+                    "hx-target": "#contractStartDateDiv",
+                    "hx-include": "#payslipCreateForm",
+                    "hx-trigger": "change delay:300ms",
+                }
+            ),
+            "end_date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                }
+            ),
+        }
+
+
+
+
 class GeneratePayslipForm(HorillaForm):
     """
     Form for Payslip

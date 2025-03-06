@@ -41,6 +41,7 @@ urlpatterns = [
     ),
     path("create-deduction", component_views.create_deduction, name="create-deduction"),
     path("view-deduction/", component_views.view_deduction, name="view-deduction"),
+    path("view-gratuity/", component_views.view_gratuity, name="view-gratuity"),
     path(
         "single-deduction-view/<int:deduction_id>",
         component_views.view_single_deduction,

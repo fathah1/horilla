@@ -44,6 +44,11 @@ SUBMENUS = [
         "redirect": reverse("view-reimbursement"),
     },
     {
+        "menu": "Gratuity",
+        "redirect": reverse("view-gratuity"),
+        "accessibility": "payroll.sidebar.gratuity_accessibility",
+    },
+    {
         "menu": trans("Federal Tax"),
         "redirect": reverse("filing-status-view"),
         "accessibility": "payroll.sidebar.federal_tax_accessibility",
@@ -60,6 +65,9 @@ def allowance_accessibility(request, submenu, user_perms, *args, **kwargs):
 
 
 def deduction_accessibility(request, submenu, user_perms, *args, **kwargs):
+    return request.user.has_perm("payroll.view_deduction")
+
+def gratuity_accessibility(request, submenu, user_perms, *args, **kwargs):
     return request.user.has_perm("payroll.view_deduction")
 
 

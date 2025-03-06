@@ -561,6 +561,41 @@ def create_deduction(request):
 
 @login_required
 @permission_required("payroll.view_allowance")
+
+def view_gratuity(request):
+    """
+    This method is used render template to view all the deduction instances
+    """
+
+    deductions = Deduction.objects.exclude(only_show_under_employee=True)
+    deduction_filter = DeductionFilter(request.GET)
+    deductions = paginator_qry(deductions, request.GET.get("page"))
+    deduction_ids = json.dumps([instance.id for instance in deductions.object_list])
+    form = forms.GratuityForm()
+
+    # return render(
+    #     request,
+    #     "payroll/payslip/create_payslip.html",
+    #     {"individual_form": form},
+    # )
+
+    return render(
+        request,
+        "payroll/gratuity/view_gratuity.html",
+        {
+            "deductions": deductions,
+            "f": deduction_filter,
+            "deduction_ids": deduction_ids,
+            "individual_form": form
+        },
+        
+    )
+
+
+@login_required
+@hx_request_required
+
+
 def view_deduction(request):
     """
     This method is used render template to view all the deduction instances
