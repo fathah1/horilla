@@ -59,7 +59,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-*.sqlite
+*.sqlite3
 
 # Flask stuff:
 instance/
@@ -136,10 +136,10 @@ dmypy.json
 !**/migrations/__init__.py
 
 # media file
-media/
+# media/
 
 #collected static files
-staticfiles/
+# staticfiles/
 
 #node_modules
 node_modules/
