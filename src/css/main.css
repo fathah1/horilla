@@ -10684,6 +10684,7 @@ div.ui-tooltip {
   border-top: 5px solid;
   transition: all 0.4s ease-in-out;
   cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 .oh-card-dashboard:hover {
   transition: all 0.4s ease-in-out;
