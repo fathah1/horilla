@@ -15,9 +15,7 @@ def update_compensation_deduction(employee, compensation_amount, compensation_ty
         compensation_amount (_type_): Gross pay or Basic pay or employee
     """
     deduction_heads = (
-        Deduction.objects.filter(
-            update_compensation=compensation_type, specific_employees=employee
-        )
+        Deduction.objects.filter(update_compensation=compensation_type, specific_employees=employee)
         .exclude(one_time_date__lt=start_date)
         .exclude(one_time_date__gt=end_date)
         # .exclude(exclude_employees=employee)

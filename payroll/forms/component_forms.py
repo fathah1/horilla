@@ -374,6 +374,7 @@ class PayslipForm(ModelForm):
             "employee_id",
             "start_date",
             "end_date",
+            "require_gratuity"
         ]
         exclude = ["is_active"]
         widgets = {
@@ -397,7 +398,7 @@ class PayslipForm(ModelForm):
 
 class GratuityForm(ModelForm):
     """
-    Form for Payslip
+    Form for gratuity
     """
 
     def __init__(self, *args, **kwargs):

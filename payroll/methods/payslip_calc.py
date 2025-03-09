@@ -14,6 +14,7 @@ from django.apps import apps
 from horilla.methods import get_horilla_model_class
 from payroll.methods.deductions import update_compensation_deduction
 from payroll.methods.limits import compute_limit
+from datetime import datetime
 from payroll.models import models
 from payroll.models.models import (
     Allowance,
@@ -217,10 +218,11 @@ def calculate_gross_pay(*_args, **kwargs):
     basic_pay = kwargs["basic_pay"]
     basic_pay_HRA = kwargs["basic_pay_HRA"]
     basic_pay_other_allowances = kwargs["basic_pay_other_allowances"]
+    gratuity = kwargs["gratuity"]
     
     total_allowance = kwargs["total_allowance"]
     # basic_pay = compute_salary_on_period(employee, start_date, end_date)["basic_pay"]
-    gross_pay = total_allowance + basic_pay + basic_pay_HRA + basic_pay_other_allowances
+    gross_pay = total_allowance + basic_pay + basic_pay_HRA + basic_pay_other_allowances + gratuity
 
     employee, start_date, end_date = (
         kwargs[key] for key in ("employee", "start_date", "end_date")
@@ -425,6 +427,72 @@ def calculate_allowance(**kwargs):
         }
         serialized_allowances.append(serialized_allowance)
     return {"allowances": serialized_allowances}
+
+
+
+def calculate_gratuity(date_joining, end_date, basic_pay, contract_type="unlimited"):
+    """
+    Calculate end-of-service gratuity as per UAE labor law.
+
+    :param date_joining: Employee joining date (YYYY-MM-DD format or datetime object).
+    :param end_date: Employee last working date (YYYY-MM-DD format or datetime object).
+    :param basic_pay: Employee's last drawn basic salary.
+    :param contract_type: "limited" or "unlimited" contract type.
+    :return: Gratuity amount.
+    """
+
+    # Convert string dates to datetime if necessary
+    if isinstance(date_joining, str):
+        date_joining = datetime.strptime(date_joining, "%Y-%m-%d")
+    if isinstance(end_date, str):
+        end_date = datetime.strptime(end_date, "%Y-%m-%d")
+
+    # Calculate total years of service
+    days_worked = (end_date - date_joining).days
+    years_of_service = days_worked / 365
+
+    # Gratuity calculation
+    if years_of_service < 1:
+        return 0  # No gratuity if less than 1 year of service
+
+    first_five_years = min(5, years_of_service)  # Up to 5 years
+    extra_years = max(0, years_of_service - 5)   # Beyond 5 years
+
+    print("basic pay in gdata = ", basic_pay)
+    # Gratuity calculation
+    gratuity_first_part = (first_five_years * 21 * basic_pay) / 30
+    gratuity_second_part = (extra_years * 30 * basic_pay) / 30
+
+    print("gdata",gratuity_first_part, gratuity_second_part)
+
+
+    gratuity = gratuity_first_part + gratuity_second_part
+    print(gratuity)
+
+    # Max limit check: Cannot exceed 2 years of basic salary
+    max_gratuity = 24 * basic_pay  # 24 months' salary
+    return min(gratuity, max_gratuity)
+
+
+def calculate_duration(date_joining, end_date):
+    """Calculate the duration of employment in years, months, and days."""
+    if not date_joining or not end_date:
+        return "N/A"
+
+    # Convert dates to datetime objects if they are strings
+    date_joining = datetime.strptime(str(date_joining), "%Y-%m-%d")
+    end_date = datetime.strptime(str(end_date), "%Y-%m-%d")
+
+    # Calculate differences
+    delta = end_date - date_joining
+    total_days = delta.days
+    years = total_days // 365
+    remaining_days = total_days % 365
+    months = remaining_days // 30  # Approximate month length
+    days = remaining_days % 30
+
+    return f"{years} year(s), {months} month(s), {days} day(s)"
+
 
 
 def calculate_tax_deduction(*_args, **kwargs):

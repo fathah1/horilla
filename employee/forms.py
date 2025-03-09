@@ -310,12 +310,24 @@ class EmployeeWorkInformationForm(ModelForm):
             "HRA",
             "other_allowances",
             "salary_hour",
+            "sponsor_company",
+            "emirates_id_expiry",
+            "emirates_id_no",
+            "visa_expiry",
+            "visa_no",
+            "work_permit_expiry",
+            "work_permit_no",
+
         )
         exclude = ("employee_id",)
 
         widgets = {
             "date_joining": DateInput(attrs={"type": "date"}),
             "contract_end_date": DateInput(attrs={"type": "date"}),
+            "visa_expiry": DateInput(attrs={"type": "date"}),
+            "work_permit_expiry": DateInput(attrs={"type": "date"}),
+            "emirates_id_expiry": DateInput(attrs={"type": "date"}),
+
         }
 
     def __init__(self, *args, disable=False, **kwargs):

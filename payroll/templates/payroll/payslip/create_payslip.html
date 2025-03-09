@@ -38,6 +38,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-sm-12 col-md-6">
+            <div class="oh-input-group oh-label__info justify-content-between">
+                <div class="d-flex align-items-center">
+                    <label for="{{individual_form.require_gratuity.id_for_label}}" class="oh-label">{% trans "Require Gratuity" %}</label>
+                    <span class=" oh-info me-3" title="{% trans "Do you want to show leave gratuity for this Payslip?" %}"></span>
+                </div>
+                <div class="oh-switch p-3 ">
+                    {{individual_form.require_gratuity}}
+                    {{individual_form.require_gratuity.errors}}
+                </div>
+            </div>
+        </div>
+
         <div class="oh-modal__dialog-footer p-0 pt-4">
             <input type="submit" value="Save" class="oh-btn oh-btn--secondary oh-btn--shadow" />
         </div>

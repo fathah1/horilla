@@ -1384,11 +1384,10 @@ class Payslip(HorillaModel):
         max_length=50, null=True, blank=True, verbose_name=_("Batch name")
     )
     reference = models.CharField(max_length=255, unique=False, null=True, blank=True)
-    employee_id = models.ForeignKey(
-        Employee, on_delete=models.PROTECT, verbose_name=_("Employee")
-    )
+    employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT, verbose_name=_("Employee"))
     start_date = models.DateField()
     end_date = models.DateField()
+    require_gratuity = models.BooleanField(default=False)
     pay_head_data = models.JSONField()
     contract_wage = models.FloatField(null=True, default=0)
     contract_wage_HRA = models.FloatField(null=True, default=0)

@@ -322,6 +322,7 @@
           });
         }
       }
+
       function updateBulkStatus(element) {
         var status = element.val();
         var ids = [];
@@ -410,6 +411,7 @@
           });
         }
       }
+      
       function updateView(viewType) {
         var currentUrl = window.location.href;
         var params = new URLSearchParams(window.location.search);
@@ -426,6 +428,7 @@
         var updatedUrl = currentUrl.split("?")[0] + "?" + params.toString();
         history.pushState({ path: updatedUrl }, "", updatedUrl);
       }
+      
       $(document).ready(function () {
         $(
           `[action="/payroll/create-payslip"], [action="/payroll/generate-payslip"]`
@@ -449,6 +452,7 @@
           });
         });
       });
+
       function updatePayStatus($element) {
         var instanceId = $element.attr("data-instance-id");
         var status = $element.val();
@@ -495,6 +499,7 @@
           },
         });
       }
+
       $("#payslipBulkSend").click(function (e) {
         e.preventDefault();
         var languageCode = null;

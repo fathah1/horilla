@@ -67,6 +67,8 @@ from payroll.methods.methods import (
 from payroll.methods.payslip_calc import (
     calculate_allowance,
     calculate_gross_pay,
+    calculate_gratuity,
+    calculate_duration,
     calculate_net_pay_deduction,
     calculate_post_tax_deduction,
     calculate_pre_tax_deduction,
@@ -142,6 +144,20 @@ def payroll_calculation(employee, start_date, end_date):
     
     basic_pay = updated_basic_pay_data["compensation_amount"]
     basic_pay_deductions = updated_basic_pay_data["deductions"]
+ 
+
+    workInfo = EmployeeWorkInformation.objects.filter(employee_id=employee)
+
+    date_joining = workInfo.first().date_joining
+
+    gratuity = calculate_gratuity(date_joining, end_date, basic_pay_details["contract_wage"])
+    s
+
+
+    duration = calculate_duration(date_joining, end_date)
+
+
+    print("gratuity", gratuity)
 
     loss_of_pay_amount = 0
     if not contract.deduct_leave_from_basic_pay:
@@ -156,6 +172,7 @@ def payroll_calculation(employee, start_date, end_date):
         "basic_pay": basic_pay,
         "basic_pay_HRA": basic_pay_HRA,
         "basic_pay_other_allowances": basic_pay_other_allowances,
+        "gratuity": gratuity,
         "day_dict": working_days_details,
     }
     # basic pay will be basic_pay = basic_pay - update_compensation_amount
@@ -230,8 +247,12 @@ def payroll_calculation(employee, start_date, end_date):
     for deduction in update_net_pay_deductions:
         net_pay_deduction_list.append(deduction)
     net_pay = net_pay - net_pay_deductions["net_deduction"]
+
+    
     payslip_data = {
         "employee": employee,
+        "gratuity": gratuity,
+        "duration": duration,
         "contract_wage": contract_wage,
         "contract_wage_HRA": contract_wage_HRA,
         "contract_wage_other_allowances": contract_wage_other_allowances,
@@ -666,12 +687,73 @@ def view_single_deduction(request, deduction_id):
     else:
         context.update({"load_hx_url": None, "load_hx_target": None})
 
+
+    print("here in view_single)deduction");
     return render(request, "payroll/deduction/view_single_deduction.html", context)
 
 
 @login_required
 @hx_request_required
 @permission_required("payroll.view_allowance")
+
+
+def view_single_gratuity(request):
+    """
+    Render template to view a single deduction instance with navigation.
+    """
+    # previous_data = get_urlencode(request)
+    # deduction = Deduction.objects.filter(id=deduction_id).first()
+    # context = {"deduction": deduction, "pd": previous_data}
+
+    # Handle deduction IDs and navigation
+    # deduction_ids_json = request.GET.get("instances_ids")
+    # if deduction_ids_json:
+    #     deduction_ids = json.loads(deduction_ids_json)
+    #     context["previous"], context["next"] = closest_numbers(
+    #         deduction_ids, deduction_id
+    #     )
+    #     context["deduction_ids"] = deduction_ids
+
+    # # Determine htmx load URL and target
+    # HTTP_REFERER = request.META.get("HTTP_REFERER", "")
+    # referer_parts = HTTP_REFERER.rstrip("/").split("/")
+
+    # if "view-deduction" in referer_parts:
+    #     context.update(
+    #         {
+    #             "load_hx_url": f"/payroll/filter-deduction?{previous_data}",
+    #             "load_hx_target": "#payroll-deduction-container",
+    #         }
+    #     )
+    # elif referer_parts[-2:] == ["employee-view", str(referer_parts[-1])]:
+    #     try:
+    #         context.update(
+    #             {
+    #                 "load_hx_url": f"/payroll/allowances-deductions-tab/{int(referer_parts[-1])}",
+    #                 "load_hx_target": "#allowance_deduction",
+    #             }
+    #         )
+    #     except ValueError:
+    #         pass
+    # elif HTTP_REFERER.endswith("employee-profile/"):
+    #     context.update(
+    #         {
+    #             "load_hx_url": f"/payroll/allowances-deductions-tab/{request.user.employee_get.id}",
+    #             "load_hx_target": "#allowance_deduction",
+    #         }
+    #     )
+    # else:
+    #     context.update({"load_hx_url": None, "load_hx_target": None})
+
+    return render(request, "payroll/gratuity/view_single_gratuity.html")
+
+
+@login_required
+@hx_request_required
+@permission_required("payroll.view_allowance")
+
+
+
 def filter_deduction(request):
     """
     This method is used search the deduction
@@ -929,6 +1011,109 @@ def create_payslip(request, new_post_data=None):
                 employee_id=employee_id, contract_status="active"
             ).first()
 
+        if contract and start_date < contract.contract_start_date:
+            new_post_data = request.POST.copy()
+            new_post_data["start_date"] = contract.contract_start_date
+            request.POST = new_post_data
+
+        form = forms.PayslipForm(request.POST)
+
+        if form.is_valid():
+            employee = form.cleaned_data["employee_id"]
+            start_date = form.cleaned_data["start_date"]
+            end_date = form.cleaned_data["end_date"]
+            require_gratuity = form.cleaned_data["require_gratuity"]
+            payslip = Payslip.objects.filter(employee_id=employee, start_date=start_date, end_date=end_date).first()
+
+            if form.is_valid():
+                employee = form.cleaned_data["employee_id"]
+                start_date = form.cleaned_data["start_date"]
+                end_date = form.cleaned_data["end_date"]
+                require_gratuity = form.cleaned_data["require_gratuity"]
+                payslip_data = payroll_calculation(employee, start_date, end_date)
+                payslip_data["payslip"] = payslip
+                data = {}
+                data["employee"] = employee
+                data["require_gratuity"] = require_gratuity
+                data["start_date"] = payslip_data["start_date"]
+                data["end_date"] = payslip_data["end_date"]
+                data["status"] = (
+                    "draft"
+                    if request.GET.get("status") is None
+                    else request.GET["status"]
+                )
+                data["contract_wage"] = payslip_data["contract_wage"]
+                data["contract_wage_HRA"] = payslip_data["contract_wage_HRA"]
+                data["contract_wage_other_allowances"] = payslip_data["contract_wage_other_allowances"]
+                data["basic_pay"] = payslip_data["basic_pay"]
+                data["gross_pay"] = payslip_data["gross_pay"]
+                data["duration"] = payslip_data["duration"]
+                data["gratuity"] = payslip_data["gratuity"]
+                data["deduction"] = payslip_data["total_deductions"]
+                data["net_pay"] = payslip_data["net_pay"]
+                data["pay_data"] = json.loads(payslip_data["json_data"])
+                calculate_employer_contribution(data)
+                data["installments"] = payslip_data["installments"]
+                payslip_data["instance"] = save_payslip(**data)
+                form = forms.PayslipForm()
+                messages.success(request, _("Payslip Saved"))
+                payslip = payslip_data["instance"]
+                notify.send(
+                    request.user.employee_get,
+                    recipient=employee.employee_user_id,
+                    verb="Payslip has been generated for you.",
+                    verb_ar="تم إصدار كشف راتب لك.",
+                    verb_de="Gehaltsabrechnung wurde für Sie erstellt.",
+                    verb_es="Se ha generado la nómina para usted.",
+                    verb_fr="La fiche de paie a été générée pour vous.",
+                    redirect=reverse(
+                        "view-created-payslip", kwargs={"payslip_id": payslip.pk}
+                    ),
+                    icon="close",
+                )
+                return HttpResponse(
+                    f'<script>window.location.href = "/payroll/view-payslip/{payslip_data["instance"].id}/"</script>'
+                )
+    return render(
+        request,
+        "payroll/payslip/create_payslip.html",
+        {"individual_form": form},
+    )
+
+
+@login_required
+@permission_required("payroll.add_payslip")
+
+def show_gratuity(request, new_post_data=None):
+    """
+    Create a payslip for an employee.
+
+    This method is used to create a payslip for an employee based on the provided form data.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        A rendered HTML template for the payslip creation form.
+    """
+    if new_post_data:
+        request.POST = new_post_data
+
+    form = forms.PayslipForm()
+
+    if request.method == "POST":
+        employee_id = request.POST.get("employee_id")
+        start_date = (
+            datetime.strptime(request.POST.get("start_date"), "%Y-%m-%d").date()
+            if isinstance(request.POST.get("start_date"), str)
+            else request.POST.get("start_date")
+        )
+
+        if employee_id and start_date:
+            contract = Contract.objects.filter(
+                employee_id=employee_id, contract_status="active"
+            ).first()
+
             if contract and start_date < contract.contract_start_date:
                 new_post_data = request.POST.copy()
                 new_post_data["start_date"] = contract.contract_start_date
@@ -989,13 +1174,15 @@ def create_payslip(request, new_post_data=None):
                 )
     return render(
         request,
-        "payroll/payslip/create_payslip.html",
+        "payroll/gratuity/create_gratuity.html",
         {"individual_form": form},
     )
 
 
 @login_required
 @permission_required("payroll.add_payslip")
+
+
 def validate_start_date(request):
     """
     This method to validate the contract start date and the pay period start date

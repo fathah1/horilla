@@ -41,12 +41,14 @@ urlpatterns = [
     ),
     path("create-deduction", component_views.create_deduction, name="create-deduction"),
     path("view-deduction/", component_views.view_deduction, name="view-deduction"),
-    path("view-gratuity/", component_views.view_gratuity, name="view-gratuity"),
+    # path("view-gratuity/", component_views.view_gratuity, name="view-gratuity"),
     path(
         "single-deduction-view/<int:deduction_id>",
         component_views.view_single_deduction,
         name="single-deduction-view",
     ),
+    path("single-gratuity-view",component_views.view_single_gratuity,name="single-gratuity-view"),
+
     path("filter-deduction", component_views.filter_deduction, name="filter-deduction"),
     path(
         "update-deduction/<int:deduction_id>/",
@@ -65,6 +67,7 @@ urlpatterns = [
         name="delete-deduction",
     ),
     path("create-payslip", component_views.create_payslip, name="create-payslip"),
+    path("show-gratuity", component_views.show_gratuity, name="show-gratuity"),
     path(
         "check-contract-start-date",
         component_views.check_contract_start_date,

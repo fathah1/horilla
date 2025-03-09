@@ -405,9 +405,7 @@ class Candidate(HorillaModel):
     hired = models.BooleanField(default=False, verbose_name=_("Hired"))
     canceled = models.BooleanField(default=False, verbose_name=_("Canceled"))
     converted = models.BooleanField(default=False, verbose_name=_("Converted"))
-    joining_date = models.DateField(
-        blank=True, null=True, verbose_name=_("Joining Date")
-    )
+    joining_date = models.DateField(blank=True, null=True, verbose_name=_("Joining Date"))
     history = HorillaAuditLog(
         related_name="history_set",
         bases=[

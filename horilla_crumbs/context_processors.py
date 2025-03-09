@@ -53,7 +53,7 @@ sidebar_urls = [
     "view-contract",
     "view-allowance",
     "view-deduction",
-    "view-gratuity",
+    # "view-gratuity",
     "view-payslip",
     "filing-status-view",
     "attendance-view",

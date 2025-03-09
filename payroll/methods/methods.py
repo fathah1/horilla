@@ -455,10 +455,12 @@ def monthly_computation(employee, wage, start_date, end_date,wage_HRA=0, wage_ot
     basic_pay_other_allowances = 0
 
     month_data = months_between_range(wage, start_date, end_date,wage_HRA,wage_other_allowances)
-
     leave_data = get_leaves(employee, start_date, end_date)
 
     custom_leave_allowances = leave_data["custom_leave_allowances"]
+
+
+    print("wange: ", wage)
 
     isHRA = False; 
     isOtherAllowances = False;
@@ -560,6 +562,7 @@ def monthly_computation(employee, wage, start_date, end_date,wage_HRA=0, wage_ot
 
 
 
+
     if contract.deduct_leave_from_basic_pay:
         basic_pay = basic_pay - loss_of_pay
         basic_pay_HRA = basic_pay_HRA - loss_of_pay_HRA
@@ -578,6 +581,7 @@ def monthly_computation(employee, wage, start_date, end_date,wage_HRA=0, wage_ot
         "unpaid_days": unpaid_leaves,
         "paid_days": paid_days,
         "contract": contract,
+        "full_basic_pay": wage
     }
 
 
@@ -593,6 +597,7 @@ def compute_salary_on_period(employee, start_date, end_date, wage=None,wage_HRA=
     contract = Contract.objects.filter(employee_id=employee, contract_status="active").first()
     if contract is None:
         return contract
+    
 
     wage = contract.wage if wage is None else wage
     wage_HRA = contract.wage_HRA if wage_HRA is None else wage_HRA
@@ -676,6 +681,7 @@ def save_payslip(**kwargs):
     instance.group_name = kwargs.get("group_name")
     instance.start_date = kwargs["start_date"]
     instance.end_date = kwargs["end_date"]
+    instance.require_gratuity = kwargs["require_gratuity"]
     instance.status = kwargs["status"]
     instance.basic_pay = round(kwargs["basic_pay"], 2)
     instance.contract_wage = round(kwargs["contract_wage"], 2)

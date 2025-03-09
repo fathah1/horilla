@@ -438,6 +438,7 @@ form label {
 
 .oh-navbar {
     z-index: 15 !important;
+    background-color: #3c3c3c
 }
 
 .swal2-actions {

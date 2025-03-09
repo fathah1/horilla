@@ -449,30 +449,35 @@ def bulk_create_work_info_import(success_lists):
         emp.badge_id: emp
         for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
     }
+
     existing_employee_work_infos = {
         emp.employee_id: emp
         for emp in EmployeeWorkInformation.objects.filter(
             employee_id__in=existing_employees.values()
         ).only("employee_id")
     }
+    
     existing_departments = {
         dep.department: dep
         for dep in Department.objects.filter(department__in=departments).only(
             "department"
         )
     }
+
     existing_job_positions = {
         (jp.department_id, jp.job_position): jp
         for jp in JobPosition.objects.filter(job_position__in=job_positions)
         .select_related("department_id")
         .only("department_id", "job_position")
     }
+
     existing_job_roles = {
         (jr.job_position_id, jr.job_role): jr
         for jr in JobRole.objects.filter(job_role__in=job_roles)
         .select_related("job_position_id")
         .only("job_position_id", "job_role")
     }
+
     existing_work_types = {
         wt.work_type: wt
         for wt in WorkType.objects.filter(work_type__in=work_types).only("work_type")
@@ -528,16 +533,77 @@ def bulk_create_work_info_import(success_lists):
             if not pd.isnull(work_info["Contract End Date"])
             else None
         )
+
         basic_salary = (
             convert_nan("Basic Salary", work_info)
             if type(convert_nan("Basic Salary", work_info)) is int
             else 0
         )
+
         salary_hour = (
             convert_nan("Salary Hour", work_info)
             if type(convert_nan("Salary Hour", work_info)) is int
             else 0
         )
+
+        sponsor_company = (
+            work_info["Sponsor Company"]
+            if not pd.isnull(work_info["Sponsor Company"])
+            else None
+        )
+
+        emirates_id_expiry = (
+            work_info["EID Expiry"]
+            if not pd.isnull(work_info["EID Expiry"])
+            else datetime.today()
+        )
+
+        print(work_info)
+
+        
+
+        emirates_id_no = (
+            work_info["EID No"]
+            if not pd.isnull(work_info["EID No"])
+            else None
+        )
+
+        visa_expiry = (
+            work_info["Visa Expiry"]
+            if not pd.isnull(work_info["Visa Expiry"])
+            else datetime.today()
+        )
+
+        visa_no = (
+            work_info["Visa No"]
+            if not pd.isnull(work_info["Visa No"])
+            else None
+        )
+
+        work_permit_expiry = (
+            work_info["Work Permit Expiry"]
+            if not pd.isnull(work_info["Work Permit Expiry"])
+            else datetime.today()
+        )
+
+        work_permit_no = (
+            work_info["Work Permit No"]
+            if not pd.isnull(work_info["Work Permit No"])
+            else None
+        )
+
+        HRA = (
+            work_info["HRA"]
+            if not pd.isnull(work_info["HRA"])
+            else None
+        )
+
+        other_allowances = (
+            work_info["Other Allowances"]
+            if not pd.isnull(work_info["Other Allowances"])
+            else None
+        )
+
 
         employee_obj = existing_employees.get(badge_id)
         employee_work_info = existing_employee_work_infos.get(employee_obj)
@@ -564,6 +630,21 @@ def bulk_create_work_info_import(success_lists):
                 ),
                 basic_salary=basic_salary,
                 salary_hour=salary_hour,
+                sponsor_company=sponsor_company,
+                emirates_id_expiry=(
+                    emirates_id_expiry if not pd.isnull(emirates_id_expiry) else None
+                ),
+                emirates_id_no=emirates_id_no,
+                visa_expiry=(
+                    visa_expiry if not pd.isnull(visa_expiry) else None
+                ),
+                visa_no=visa_no,
+                work_permit_expiry=(
+                    work_permit_expiry if not pd.isnull(work_permit_expiry) else None
+                ),
+                work_permit_no=work_permit_no,
+                HRA=HRA,
+                other_allowances=other_allowances,
             )
             new_work_info_list.append(employee_work_info)
         else:
@@ -586,6 +667,21 @@ def bulk_create_work_info_import(success_lists):
             )
             employee_work_info.basic_salary = basic_salary
             employee_work_info.salary_hour = salary_hour
+            employee_work_info.sponsor_company = sponsor_company
+            employee_work_info.emirates_id_expiry =  (
+                date_joining if not pd.isnull(emirates_id_expiry) else  None
+            )
+            employee_work_info.emirates_id_no = emirates_id_no
+            employee_work_info.visa_expiry = (
+                date_joining if not pd.isnull(visa_expiry) else  None
+            )
+            employee_work_info.visa_no = visa_no
+            employee_work_info.work_permit_expiry = (
+                date_joining if not pd.isnull(work_permit_expiry) else  None
+            )
+            employee_work_info.work_permit_no = work_permit_no
+            employee_work_info.HRA = HRA
+            employee_work_info.other_allowances = other_allowances
             update_work_info_list.append(employee_work_info)
 
     if new_work_info_list:
@@ -608,6 +704,15 @@ def bulk_create_work_info_import(success_lists):
                 "contract_end_date",
                 "basic_salary",
                 "salary_hour",
+                "sponsor_company",
+                "emirates_id_expiry",
+                "emirates_id_no",
+                "visa_expiry",
+                "visa_no",
+                "work_permit_expiry",
+                "work_permit_no",    
+                "HRA",
+                "other_allowances"
             ],
         )
     if apps.is_installed("payroll"):

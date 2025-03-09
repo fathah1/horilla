@@ -205,6 +205,53 @@
 											<span
 												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.contract_end_date|default:_("None")}}</span>
 										</li>
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "Work Permit No." %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.work_permit_no|default:_("None")}}</span>
+										</li>
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "Work Permit Expiry" %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.work_permit_expiry|default:_("None")}}</span>
+										</li>
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "Visa No." %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.visa_no|default:_("None")}}</span>
+										</li>
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "Visa Expiry" %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.visa_expiry|default:_("None")}}</span>
+										</li>
+
+
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "Sponsor Company" %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.sponsor_company|default:_("None")}}</span>
+										</li>
 									</ul>
 								</div>
 
@@ -319,6 +366,24 @@
 												<span class="oh-profile__info-value dateformat_changer">{% trans "None" %}</span>
 												{% endif %}
 											</div>
+										</li>
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "Emirates ID No." %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.emirates_id_no|default:_("None")}}</span>
+										</li>
+
+										<li class="oh-profile__card-info-item">
+											<span class="oh-profile__info-label mb-1">
+												<ion-icon name="calendar-outline"></ion-icon>
+												<span>{% trans "E-ID Expiry" %}</span>
+											</span>
+											<span
+												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.emirates_id_expiry|default:_("None")}}</span>
 										</li>
 
 									</ul>

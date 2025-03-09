@@ -33,8 +33,33 @@
                 <span class="oh-payslip__employee-detail-title">{% trans "Bank Acc./Cheque No." %}</span>
                 <span class="oh-payslip__employee-detail-value">{{employee.employee_bank_details.account_number}}</span>
             </li>
+
         </ul>
     </div>
+
+
+    {% if instance.require_gratuity %}
+    <div class="oh-payslip__user-detail">
+        <h3 class="oh-payslip__employee-title">
+            {% trans "Gratuity Details" %}
+        </h3>
+        <ul class="oh-payslip__employee-details">
+            <li class="oh-payslip__employee-detail">
+                <span class="oh-payslip__employee-detail-title">{% trans "Joining Date" %}</span>
+                <span class="oh-payslip__employee-detail-value">{{employee.employee_work_info.date_joining}}</span>
+            </li>
+            <li class="oh-payslip__employee-detail">
+                <span class="oh-payslip__employee-detail-title">{% trans "End Date" %}</span>
+                <span class="oh-payslip__employee-detail-value">{{end_date}}</span>
+            </li>
+            <li class="oh-payslip__employee-detail">
+                <span class="oh-payslip__employee-detail-title">{% trans "Duration of Employment" %}</span>
+                <span class="oh-payslip__employee-detail-value">{{ duration }}</span>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+
 
     <div class="oh-payslip__netpay" style="text-align:left; border-radius: 15px; border: 1px solid hsl(213,22%,84%);">
         <div style="border-radius: 15px; background-color: #d2f8d7; padding: 10px; border-left: 3px solid #00cc66;">
@@ -134,6 +159,18 @@
                 </td>
             </tr>
 
+
+            {% if instance.require_gratuity %}
+            <tr class="oh-payslip__table-tr">
+                <td class="oh-payslip__table-td"
+                    title="{% trans 'Some deductions will update basic pay before payslip calculation starts, eg: LOP is Deduducted from basic pay if `Deduct leave from basic pay` field is enabled on the contract, and also with the update compensation deduction through' %}">
+                    {% trans "Gratuity" %}
+                </td>
+                <td class="oh-payslip__table-td" colspan="2">
+                    {{gratuity|floatformat:2|currency_symbol_position}}
+                </td>
+            </tr>
+            {% endif %}
 
             {% for allowance in allowances %}
                 <tr>

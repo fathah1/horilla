@@ -25,11 +25,11 @@ SUBMENUS = [
         "redirect": reverse("view-allowance"),
         "accessibility": "payroll.sidebar.allowance_accessibility",
     },
-    {
-        "menu": trans("Deductions"),
-        "redirect": reverse("view-deduction"),
-        "accessibility": "payroll.sidebar.deduction_accessibility",
-    },
+    # {
+    #     "menu": trans("Deductions"),
+    #     "redirect": reverse("view-deduction"),
+    #     # "accessibility": "payroll.sidebar.deduction_accessibility",
+    # },
     {
         "menu": trans("Payslips"),
         "redirect": reverse("view-payslip"),
@@ -43,16 +43,16 @@ SUBMENUS = [
         "menu": trans("Encashments & Reimbursements"),
         "redirect": reverse("view-reimbursement"),
     },
-    {
-        "menu": "Gratuity",
-        "redirect": reverse("view-gratuity"),
-        "accessibility": "payroll.sidebar.gratuity_accessibility",
-    },
-    {
-        "menu": trans("Federal Tax"),
-        "redirect": reverse("filing-status-view"),
-        "accessibility": "payroll.sidebar.federal_tax_accessibility",
-    },
+    # {
+    #     "menu": "Gratuity",
+    #     "redirect": reverse("view-gratuity"),
+    #     "accessibility": "payroll.sidebar.gratuity_accessibility",
+    # },
+    # {
+    #     "menu": trans("Federal Tax"),
+    #     "redirect": reverse("filing-status-view"),
+    #     "accessibility": "payroll.sidebar.federal_tax_accessibility",
+    # },
 ]
 
 
@@ -64,16 +64,17 @@ def allowance_accessibility(request, submenu, user_perms, *args, **kwargs):
     return request.user.has_perm("payroll.view_allowance")
 
 
-def deduction_accessibility(request, submenu, user_perms, *args, **kwargs):
-    return request.user.has_perm("payroll.view_deduction")
+# def deduction_accessibility(request, submenu, user_perms, *args, **kwargs):
+#     print("here in accessibility")
+#     return request.user.has_perm("payroll.view_deduction")
 
-def gratuity_accessibility(request, submenu, user_perms, *args, **kwargs):
-    return request.user.has_perm("payroll.view_deduction")
+# def gratuity_accessibility(request, submenu, user_perms, *args, **kwargs):
+#     return request.user.has_perm("payroll.view_deduction")
 
 
 def loan_accessibility(request, submenu, user_perms, *args, **kwargs):
     return request.user.has_perm("payroll.view_loanaccount")
 
 
-def federal_tax_accessibility(request, submenu, user_perms, *args, **kwargs):
-    return request.user.has_perm("payroll.view_filingstatus")
+# def federal_tax_accessibility(request, submenu, user_perms, *args, **kwargs):
+#     return request.user.has_perm("payroll.view_filingstatus")
