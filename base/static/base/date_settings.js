@@ -1,11 +1,8 @@
 function saveDateFormat() {
   var dateFormatSelector = document.getElementById('dateFormat');
   const selectedFormat = dateFormatSelector.value;
-
-  // Set the selected date format in the utility
+  
   dateFormatter.setDateFormat(selectedFormat);
-
-  // Save the date format to the backend
   saveDateFormatToBackend(selectedFormat);
 
 }
