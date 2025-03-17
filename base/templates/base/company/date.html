@@ -79,6 +79,9 @@
 
 <script>
 
+    console.log("{% static '/build/js/moment.js' %}");
+    console.log("{% static 'base/date_formatting.js' %}");
+
     // To display the selected date format
     const formatMapping = {
         'DD-MM-YYYY': '{% trans "Day, Month, Year (e.g., 30-12-2023)" %}',
