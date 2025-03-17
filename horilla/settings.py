@@ -121,9 +121,6 @@ WSGI_APPLICATION = "horilla.wsgi.application"
 # else:
 DATABASE_DIR = Path.home() / "database"
 
-
-print(DATABASE_DIR);
-
 DATABASES = {
         "default": {
             "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
