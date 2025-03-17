@@ -119,10 +119,14 @@ WSGI_APPLICATION = "horilla.wsgi.application"
 #         "default": env.db(),
 #     }
 # else:
+DATABASE_DIR = Path.home() / "database"
+
+print(DATABASE_DIR);
+
 DATABASES = {
         "default": {
             "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
-            "NAME":   env( "DB_NAME",default=os.path.join(BASE_DIR,"DB_Horilla.sqlite3"),),
+            "NAME": os.getenv("DB_NAME", str(DATABASE_DIR / "DB_Horilla.sqlite3")),
             "USER": env("DB_USER", default=""),
             "PASSWORD": env("DB_PASSWORD", default=""),
             "HOST": env("DB_HOST", default=""),
