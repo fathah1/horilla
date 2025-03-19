@@ -2557,6 +2557,22 @@ def work_info_import(request):
                     work_info["Phone error"] = f"Phone Number can't be empty"
                     error = True
 
+                experience_value = work_info.get("Experience", None)
+                if pd.isna(experience_value) or experience_value in ["", None]:  
+                    work_info["Experience"] = None
+
+                children_value = work_info.get("Children", None)
+                if pd.isna(children_value) or children_value in ["", None]:  
+                    work_info["Children"] = None
+
+                # experience_value = work_info.get("Experience", None)
+                # if pd.isna(experience_value) or experience_value in ["", None]:  
+                #     work_info["Experience"] = None
+
+                # children_value = work_info.get("Children", None)
+                # if pd.isna(children_value) or children_value in ["", None]:  
+                #     work_info["Children"] = None
+
                 name_email_tuple = (first_name, last_name, email)
                 if name_email_tuple in existing_name_emails:
                     work_info["Name and Email Error"] = (
@@ -2582,6 +2598,9 @@ def work_info_import(request):
                     )
                     error = True
 
+
+
+
                 if badge_id in existing_badge_ids:
                     work_info["Badge ID Error"] = (
                         f"An Employee with the badge ID already exists"
@@ -2590,13 +2609,13 @@ def work_info_import(request):
                 else:
                     existing_badge_ids.add(badge_id)
 
-                if email in existing_usernames:
-                    work_info["User ID Error"] = (
-                        f"User with the email ID already exists"
-                    )
-                    error = True
-                else:
-                    existing_usernames.add(email)
+                # if email in existing_usernames:
+                #     work_info["User ID Error"] = (
+                #         f"User with the email ID already exists"
+                #     )
+                #     error = True
+                # else:
+                    # existing_usernames.add(email)
 
                 if error:
                     error_lists.append(work_info)

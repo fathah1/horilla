@@ -95,9 +95,7 @@ class Employee(models.Model):
     )
     qualification = models.CharField(max_length=50, blank=True, null=True)
     experience = models.IntegerField(null=True, blank=True)
-    marital_status = models.CharField(
-        max_length=50, blank=True, null=True, choices=choice_marital, default="single"
-    )
+    marital_status = models.CharField(max_length=50, blank=True, null=True, choices=choice_marital, default="single")
     children = models.IntegerField(blank=True, null=True)
     emergency_contact = models.CharField(max_length=15, null=True, blank=True)
     emergency_contact_name = models.CharField(max_length=20, null=True, blank=True)
