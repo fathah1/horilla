@@ -171,6 +171,18 @@ def bulk_create_employee_import(success_lists):
         last_name = convert_nan("Last Name", work_info)
         phone = work_info["Phone"]
         gender = work_info.get("Gender", "").lower()
+        dob = work_info["DOB"]
+        country = work_info["Country"]
+        state = work_info["State"]
+        city = work_info["City"]
+        qualification = work_info["Qualification"]
+        experience = work_info["Experience"]
+        marital_status = work_info.get("Marital Status", "").lower()
+        children = work_info["Children"]
+        emergency_contact = work_info["Emergency Contact"]
+        emergency_contact_relation = work_info["Emergency Contact Relation"]
+        emergency_contact_name = work_info["Emergency Contact Name"]
+        address = work_info["Address"]
         employee_obj = Employee(
             employee_user_id=user,
             badge_id=badge_id,
@@ -179,6 +191,18 @@ def bulk_create_employee_import(success_lists):
             email=email,
             phone=phone,
             gender=gender,
+            dob=dob,
+            country=country,
+            state=state,
+            city=city,
+            qualification=qualification,
+            experience=experience, 
+            marital_status=marital_status,
+            children=children,
+            address=address,
+            emergency_contact_name=emergency_contact_name,
+            emergency_contact=emergency_contact,
+            emergency_contact_relation=emergency_contact_relation
         )
         employee_obj_list.append(employee_obj)
     result = []
@@ -558,9 +582,6 @@ def bulk_create_work_info_import(success_lists):
             else datetime.today()
         )
 
-        print(work_info)
-
-        
 
         emirates_id_no = (
             work_info["EID No"]

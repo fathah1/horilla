@@ -124,7 +124,7 @@ DATABASE_DIR = Path.home() / "database"
 DATABASES = {
         "default": {
             "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
-            "NAME": os.getenv("DB_NAME", str(DATABASE_DIR / "DB_Horilla.sqlite3")),
+            "NAME": os.getenv("DB_NAME", str("/var/www/database/DB_Horilla.sqlite3")),
             "USER": env("DB_USER", default=""),
             "PASSWORD": env("DB_PASSWORD", default=""),
             "HOST": env("DB_HOST", default=""),

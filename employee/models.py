@@ -631,6 +631,8 @@ class EmployeeWorkInformation(models.Model):
     date_joining = models.DateField(
         null=True, blank=True, verbose_name=_("Joining Date")
     )
+
+
     contract_end_date = models.DateField(blank=True, null=True)
 
     basic_salary = models.IntegerField(
@@ -655,28 +657,26 @@ class EmployeeWorkInformation(models.Model):
         null=True, blank=True, verbose_name=_("Work Permit Expiry")
     )
 
-    visa_no = models.IntegerField(
-        null=True, blank=True, default=0, verbose_name=_("Visa No")
+    visa_no = models.CharField(
+         max_length=254, null=True, blank=True, verbose_name=_("Visa No")
     )
 
+    emirates_id_no = models.CharField(
+        max_length=254, null=True, blank=True, verbose_name=_("E-ID No")
+    )
 
     visa_expiry = models.DateField(
         null=True, blank=True, verbose_name=_("Visa Expiry")
     )
 
-    emirates_id_no = models.IntegerField(
-        null=True, blank=True, default=0, verbose_name=_("E-ID No")
-    )
+
 
 
     emirates_id_expiry = models.DateField(
         null=True, blank=True, verbose_name=_("E-ID Expiry")
     )
 
-    sponsor_company = models.CharField(
-        max_length=254,
-        blank=True,
-        null=True,
+    sponsor_company = models.CharField(max_length=254,blank=True, null=True,
     )
     
     salary_hour = models.IntegerField(
@@ -686,6 +686,7 @@ class EmployeeWorkInformation(models.Model):
     additional_info = models.JSONField(null=True, blank=True)
 
     experience = models.FloatField(null=True, blank=True, default=0)
+
     history = HorillaAuditLog(
         related_name="history_set",
         bases=[
