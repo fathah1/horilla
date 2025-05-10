@@ -6,7 +6,7 @@
             <ion-icon name="business"></ion-icon>
         </a>
         <div class="oh-dropdown__menu oh-dropdown__menu--right" x-show="open"
-            @click.outside="open = false" style="display:none; margin-top:115%;">
+            @click.outside="open = false" style="display:none; margin-top:115%; min-width: 250px !important;">
             <ul class="oh-dropdown__items">
                 {% for company in all_companies %}
                     <li class="oh-dropdown__item">

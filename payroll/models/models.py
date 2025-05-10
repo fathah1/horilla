@@ -195,6 +195,8 @@ class Contract(HorillaModel):
         blank=True,
         verbose_name=_("Filing Status"),
     )
+
+    
     contract_status = models.CharField(
         choices=CONTRACT_STATUS_CHOICES,
         max_length=250,
@@ -250,8 +252,8 @@ class Contract(HorillaModel):
     contract_document = models.FileField(upload_to="uploads/", null=True, blank=True)
     deduct_leave_from_basic_pay = models.BooleanField(
         default=True,
-        verbose_name=_("Deduct From Basic Pay"),
-        help_text=_("Deduct the leave amount from basic pay."),
+        verbose_name=_("Deduct From Salary"),
+        help_text=_("Deduct the leave amount from salary."),
     )
     calculate_daily_leave_amount = models.BooleanField(
         default=True,

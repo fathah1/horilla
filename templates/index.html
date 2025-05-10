@@ -8,6 +8,7 @@
 {% comment %} <html dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" lang="{{ LANGUAGE_CODE }}"> {% endcomment %}
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,6 +31,63 @@
     <meta name="msapplication-TileColor" content="#3c3c3c">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="{% static 'build/css/style.min.css' %}" />
+
+
+<style> .oh-navbar__action-icons .oh-dropdown__menu { background-color: #f9f9f6; color: #3c3c3c; border-radius: 10px; padding: 10px 0; min-width: 200px; max-width: 300px; word-wrap: break-word; white-space: normal; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); } .oh-navbar__action-icons .oh-dropdown__link { color: #3c3c3c; display: block; padding: 8px 16px; text-decoration: none; } .oh-navbar__action-icons .oh-dropdown__item { word-break: break-word; } .oh-navbar__action-icons .oh-dropdown__item:hover { background-color: #e6e6e2; border-radius: 8px; } </style>
+
+    <style>
+
+                /* Notification Dropdown Box */
+        .oh-navbar__notification-tray {
+            background-color: #f9f9f6;
+            color: #3c3c3c;
+            border-radius: 12px;
+            min-width: 250px;
+            max-width: 350px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            word-wrap: break-word;
+            white-space: normal;
+            transition: all 0.3s ease;
+        }
+
+        /* Each Notification Item */
+        .oh-navbar__notification-item {
+            display: block;
+            padding: 10px 16px;
+            text-decoration: none;
+            color: #3c3c3c;
+            border-radius: 8px;
+        }
+
+        /* Hover Effect */
+        .oh-navbar__notification-item:hover {
+            background-color: #e6e6e2;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        /* Notification Text */
+        .oh-navbar__notification-text {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* For Empty State */
+        .oh-navbar__notification-empty {
+            text-align: center;
+            padding: 20px;
+            color: #3c3c3c;
+        }
+
+
+
+
+    </style>
+
+
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'build/css/summernote-lite.min.css' %}" />
     <link rel="stylesheet" href="{% static 'build/css/orgChart.css' %}" />
@@ -42,7 +100,29 @@
     <script src="{% static 'build/js/driver.js' %}"></script>
     <script src="{% static 'build/js/clearFilter.js' %}"></script>
 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <style>
+        @font-face {
+          font-family: 'Gotham';
+          src: url("{% static 'fonts/gotham.woff2' %}") format('woff2'),
+               url("{% static 'fonts/gotham.woff' %}") format('woff');
+          font-weight: normal;
+          font-style: normal;
+        }
+        
+        @font-face {
+          font-family: 'DIN Pro';
+          src: url("{% static 'fonts/dinpro.woff2' %}") format('woff2'),
+               url("{% static 'fonts/dinpro.woff' %}") format('woff');
+          font-weight: normal;
+          font-style: normal;
+        }
+        
+        .note-editable {
+          font-family: 'Gotham', 'DIN Pro', 'Montserrat', sans-serif;
+        }
+    </style>
 
     <!-- Popper.JS -->
     <!-- Bootstrap JS -->
@@ -127,7 +207,7 @@
             <!-- End of Notifications activity bar -->
 
             <!-- Start of Nav bar -->
-            <nav class="oh-navbar" style="width: -webkit-fill-available;;">
+            <nav class="oh-navbar" style="width: -webkit-fill-available; position: fixed;">
                 <div class="oh-wrapper oh-navbar__wrapper">
                     <div class="oh-navbar__toggle-container">
                         <a href="#" class="oh-navbar__toggle-link oh-link__unstyled"
@@ -188,7 +268,7 @@
             <!-- End of Nav bar -->
 
             <!-- Start of main section -->
-            <div id='main-section' style="background:#ffffff;">
+            <div id='main-section' style="background:#ffffff; margin-top: 40px;">
                 <div id="tripple-loader-contaner"
                     class="d-flex justify-content-center align-items-center  tripple-loader-contaner--visible"
                     style="height:90vh;">
@@ -253,10 +333,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Clear all query parameters from the URL
+        
         function clearQueryParameters() {
             var urlWithoutQuery = window.location.origin + window.location.pathname;
             window.history.replaceState({}, document.title, urlWithoutQuery);
         }
+
     </script>
     {% if enabled_timerunner %}
         <script>

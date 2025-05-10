@@ -315,6 +315,8 @@ class EmployeeWorkInformationForm(ModelForm):
             "emirates_id_no",
             "visa_expiry",
             "visa_no",
+            "passport_expiry",
+            "passport_no",
             "work_permit_expiry",
             "work_permit_no",
 
@@ -325,6 +327,7 @@ class EmployeeWorkInformationForm(ModelForm):
             "date_joining": DateInput(attrs={"type": "date"}),
             "contract_end_date": DateInput(attrs={"type": "date"}),
             "visa_expiry": DateInput(attrs={"type": "date"}),
+            "passport_expiry": DateInput(attrs={"type": "date"}),
             "work_permit_expiry": DateInput(attrs={"type": "date"}),
             "emirates_id_expiry": DateInput(attrs={"type": "date"}),
 

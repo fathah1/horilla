@@ -287,6 +287,16 @@
                     <div hidden>{{form.exclude_holiday}}</div>
 
                 </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="oh-input-group">
+                        <label for="" class="oh-label">{% trans "Description" %}</label>
+                        {{form.description}}
+                        {{form.description.errors}}
+                    </div>
+                </div>
+
+
             </div>
 
             <button type="submit"

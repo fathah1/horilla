@@ -545,17 +545,21 @@ def monthly_computation(employee, wage, start_date, end_date,wage_HRA=0, wage_ot
         loss_of_pay = (unpaid_leaves) * daily_computed_salary
         loss_of_pay_HRA = (unpaid_leaves) * daily_computed_salary_HRA
         loss_of_pay_other_allowances = (unpaid_leaves) * daily_computed_salary_other_allowences
+        print("loss of pay HRA daily computed: ", loss_of_pay_HRA)
+        print("loss of pay other allowances daily computed: ", loss_of_pay_other_allowances)
     else:
         fixed_penalty = contract.deduction_for_one_leave_amount
         loss_of_pay = (unpaid_leaves) * fixed_penalty
+        print("here in else")
+        
     
     if not isHRA:
-        loss_of_pay_HRA = (paid_leaves) * daily_computed_salary_HRA
-        print("here not HRA: ", loss_of_pay_HRA );
+        loss_of_pay_HRA = (unpaid_leaves) * daily_computed_salary_HRA
+        print("here not HRA: ", daily_computed_salary_HRA );
     
     if not isOtherAllowances:
-        loss_of_pay_other_allowances = (paid_leaves) * daily_computed_salary_other_allowences
-        print("here not OTHer allowance: ", loss_of_pay_other_allowances)
+        loss_of_pay_other_allowances = (unpaid_leaves) * daily_computed_salary_other_allowences
+        print("here not OTHer allowance: ",  daily_computed_salary_other_allowences)
 
 
 
@@ -567,6 +571,11 @@ def monthly_computation(employee, wage, start_date, end_date,wage_HRA=0, wage_ot
         basic_pay = basic_pay - loss_of_pay
         basic_pay_HRA = basic_pay_HRA - loss_of_pay_HRA
         basic_pay_other_allowances = basic_pay_other_allowances - loss_of_pay_other_allowances
+    
+    
+    print(loss_of_pay, "LOss of pay")
+    print(loss_of_pay_HRA, "LOss of pay HRA")
+    print(loss_of_pay_other_allowances, "LOss of pay other allowances")
 
 
 

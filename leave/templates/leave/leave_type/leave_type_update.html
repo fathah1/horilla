@@ -250,7 +250,18 @@
                     {{form.is_encashable.errors}}
                 </div>
             </div>
+
           </div>
+
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <div class="oh-input-group">
+                  <label for="" class="oh-label">{% trans "Description" %}</label>
+                  {{form.description}}
+                  {{form.description.errors}}
+              </div>
+          </div>
+          
           <div hidden>{{form.require_approval}}</div>
           <div hidden>{{form.require_attachment}}</div>
           <div hidden>{{form.exclude_company_leave}}</div>

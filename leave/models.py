@@ -164,7 +164,8 @@ WEEK_DAYS = [
 class LeaveType(HorillaModel):
     icon = models.ImageField(null=True, blank=True, upload_to="leave/leave_icon")
     leave_allowance = models.JSONField(default=list, blank=True)
-    name = models.CharField(max_length=30, null=False)
+    name = models.CharField(max_length=100, null=False)
+    description = models.TextField(blank=True ,max_length=255, null=False,default="")
     color = models.CharField(null=True, max_length=30)
     payment = models.CharField(max_length=30, choices=PAYMENT, default="unpaid")
     count = models.FloatField(null=True, default=1)
@@ -306,6 +307,10 @@ class LeaveType(HorillaModel):
             self.carryforward_expire_date = self.set_expired_date(
                 assigned_date=self.created_at
             )
+
+
+        if self.description is "":  # Convert None to an empty string
+            self.description = " "
 
         super().save()
 
@@ -483,6 +488,7 @@ class AvailableLeave(HorillaModel):
     # Setting the expiration date for carryforward leaves
     def set_expired_date(self, available_leave, assigned_date):
         period = available_leave.leave_type_id.carryforward_expire_in
+
         if available_leave.leave_type_id.carryforward_expire_period == "day":
             expired_date = assigned_date + relativedelta(days=period)
         elif available_leave.leave_type_id.carryforward_expire_period == "month":

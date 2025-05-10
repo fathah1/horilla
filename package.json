@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"npm run development",
-    "development":"mix"
+    "dev": "npm run development",
+    "development": "mix"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "alpinejs": "^3.10.5",
-    "ionicons": "^7.1.0",
+    "ionicons": "^7.4.0",
     "jquery": "^3.6.3",
     "jquery-ui": "^1.13.2",
     "jquery-ui-touch-punch": "^0.2.3",

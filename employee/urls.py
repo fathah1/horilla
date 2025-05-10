@@ -171,11 +171,7 @@ urlpatterns = [
     path("work-info-export", views.work_info_export, name="work-info-export"),
     path("get-birthday", views.get_employees_birthday, name="get-birthday"),
     path("dashboard", views.dashboard, name="dashboard"),
-    path(
-        "total-employees-count",
-        views.total_employees_count,
-        name="total-employees-count",
-    ),
+    path("total-employees-count",views.total_employees_count,name="total-employees-count",),
     path("joining-today-count", views.joining_today_count, name="joining-today-count"),
     path("joining-week-count", views.joining_week_count, name="joining-week-count"),
     path("dashboard-employee", views.dashboard_employee, name="dashboard-employee"),

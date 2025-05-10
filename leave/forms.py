@@ -259,8 +259,6 @@ class LeaveTypeForm(ConditionForm):
 
 
 class UpdateLeaveTypeForm(ConditionForm):
-
-
     leave_allowance = forms.MultipleChoiceField(
         choices=[
             ("HRA", "HRA"),
@@ -442,23 +440,34 @@ class LeaveRequestCreationForm(ModelForm):
         total_leave_days = (
             available_leave.available_days + available_leave.carryforward_days
         )
+
+        print("totals", "available_leave.available_days = ", available_leave.available_days , "available_leave.carryforward_days = ", available_leave.carryforward_days);
+        
+
         requested_days = calculate_requested_days(
             start_date, end_date, start_date_breakdown, end_date_breakdown
         )
+
+
         effective_requested_days = cal_effective_requested_days(
             start_date=start_date,
             end_date=end_date,
             leave_type_id=leave_type_id,
             requested_days=requested_days,
         )
+
         leave_dates = leave_requested_dates(start_date, end_date)
+
         month_year = [f"{date.year}-{date.strftime('%m')}" for date in leave_dates]
+
         today = datetime.today()
+
         unique_dates = list(set(month_year))
         if f"{today.month}-{today.year}" in unique_dates:
             unique_dates.remove(f"{today.strftime('%m')}-{today.year}")
 
         forcated_days = available_leave.forcasted_leaves(start_date)
+
         total_leave_days = (
             available_leave.leave_type_id.carryforward_max
             if available_leave.leave_type_id.carryforward_type
@@ -466,10 +475,14 @@ class LeaveRequestCreationForm(ModelForm):
             and available_leave.leave_type_id.carryforward_max < total_leave_days
             else total_leave_days
         )
+
+        print("total_leave_days = " , total_leave_days);
+
         if (
             available_leave.leave_type_id.carryforward_type == "no carryforward"
             and available_leave.carryforward_days
         ):
+            
             total_leave_days = total_leave_days - available_leave.carryforward_days
         total_leave_days += forcated_days
 
@@ -602,6 +615,7 @@ class LeaveRequestUpdationForm(ModelForm):
         total_leave_days += forcated_days
 
         if not effective_requested_days <= total_leave_days:
+            print("test here 1" );
             raise forms.ValidationError(_("Employee doesn't have enough leave days.."))
 
         return cleaned_data

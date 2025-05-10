@@ -15,6 +15,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.signals import post_save
+from base.managers_custom import EmployeeManagerExcludingAdmins
 from django.dispatch import receiver
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as trans
@@ -62,7 +63,7 @@ class Employee(models.Model):
         ("married", trans("Married")),
         ("divorced", trans("Divorced")),
     )
-    badge_id = models.CharField(max_length=50, null=True, blank=True)
+    badge_id = models.CharField(max_length=100, null=True, blank=True)
     employee_user_id = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -108,9 +109,13 @@ class Employee(models.Model):
     is_directly_converted = models.BooleanField(
         default=False, null=True, blank=True, editable=False
     )
-    objects = HorillaCompanyManager(
-        related_company_field="employee_work_info__company_id"
-    )
+
+
+    # objects = HorillaCompanyManager(
+    #     related_company_field="employee_work_info__company_id"
+    # )
+
+    objects = EmployeeManagerExcludingAdmins(related_company_field='company')
 
     def get_image(self):
         """
@@ -655,12 +660,20 @@ class EmployeeWorkInformation(models.Model):
         null=True, blank=True, verbose_name=_("Work Permit Expiry")
     )
 
+    passport_no = models.CharField(
+         max_length=254, null=True, blank=True, verbose_name=_("Passport No")
+    )
+
+    passport_expiry = models.DateField(
+        null=True, blank=True, verbose_name=_("Passport Expiry")
+    )
+
     visa_no = models.CharField(
          max_length=254, null=True, blank=True, verbose_name=_("Visa No")
     )
 
     emirates_id_no = models.CharField(
-        max_length=254, null=True, blank=True, verbose_name=_("E-ID No")
+        max_length=254, null=True, blank=True, verbose_name=_("EID No")
     )
 
     visa_expiry = models.DateField(
@@ -671,7 +684,7 @@ class EmployeeWorkInformation(models.Model):
 
 
     emirates_id_expiry = models.DateField(
-        null=True, blank=True, verbose_name=_("E-ID Expiry")
+        null=True, blank=True, verbose_name=_("EID Expiry")
     )
 
     sponsor_company = models.CharField(max_length=254,blank=True, null=True,

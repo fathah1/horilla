@@ -167,6 +167,16 @@
                         <div class="oh-timeoff-modal__stat-count">{{leave_type.is_encashable|yes_no}}</div>
                     </div>
                 </div>
+
+                <div class="oh-timeoff-modal__stats">
+                    <div class="oh-timeoff-modal__stat">
+                        <span class="oh-timeoff-modal__stat-title">{% trans "Description" %}</span>
+                        <div class="oh-timeoff-modal__stat-count">
+                            {{leave_type.description}}
+                        </div>
+                    </div>
+                </div>
+                
             </div>
             <div class="oh-modal__button-container text-center mt-3">
                 {% if perms.leave.change_leavetype and perms.leave.add_availableleave and perms.leave.delete_leavetype %}
@@ -200,6 +210,9 @@
                         {% endif %}
                     </div>
                 {% endif %}
+
+
+
             </div>
         </div>
     </div>

@@ -250,6 +250,8 @@ function template_download(e) {
             const file = new Blob([this.response], {
               type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             });
+
+            
             const url = URL.createObjectURL(file);
             const link = document.createElement("a");
             link.href = url;

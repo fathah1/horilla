@@ -150,9 +150,9 @@ def payroll_calculation(employee, start_date, end_date):
 
     date_joining = workInfo.first().date_joining
 
-    gratuity = calculate_gratuity(date_joining, end_date, basic_pay_details["contract_wage"])
-    s
+    print("end_date = ",end_date);
 
+    gratuity = calculate_gratuity(date_joining, end_date, basic_pay_details["contract_wage"])
 
     duration = calculate_duration(date_joining, end_date)
 

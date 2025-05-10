@@ -86,7 +86,6 @@ def get_ordered_badge_ids():
         ]
         filtered_group.sort(key=lambda x: int("".join(filter(str.isdigit, x))))
 
-    # Create a list containing the first and last items from each group
     result = [[group[0], group[-1]] for group in grouped_data]
 
     # Add the list of pure numbers at the beginning
@@ -601,6 +600,19 @@ def bulk_create_work_info_import(success_lists):
             else None
         )
 
+        passport_expiry = (
+            work_info["Passport Expiry"]
+            if not pd.isnull(work_info["Passport Expiry"])
+            else datetime.today()
+        )
+
+        passport_no = (
+            work_info["Passport No"]
+            if not pd.isnull(work_info["Passport No"])
+            else None
+        )
+
+
         work_permit_expiry = (
             work_info["Work Permit Expiry"]
             if not pd.isnull(work_info["Work Permit Expiry"])
@@ -660,6 +672,10 @@ def bulk_create_work_info_import(success_lists):
                     visa_expiry if not pd.isnull(visa_expiry) else None
                 ),
                 visa_no=visa_no,
+                passport_expiry=(
+                    passport_expiry if not pd.isnull(passport_expiry) else None
+                ),
+                passport_no=passport_no,
                 work_permit_expiry=(
                     work_permit_expiry if not pd.isnull(work_permit_expiry) else None
                 ),
@@ -697,6 +713,10 @@ def bulk_create_work_info_import(success_lists):
                 date_joining if not pd.isnull(visa_expiry) else  None
             )
             employee_work_info.visa_no = visa_no
+            employee_work_info.passport_expiry = (
+                date_joining if not pd.isnull(passport_expiry) else  None
+            )
+            employee_work_info.passport_no = passport_no
             employee_work_info.work_permit_expiry = (
                 date_joining if not pd.isnull(work_permit_expiry) else  None
             )
@@ -730,6 +750,8 @@ def bulk_create_work_info_import(success_lists):
                 "emirates_id_no",
                 "visa_expiry",
                 "visa_no",
+                "passport_expiry",
+                "passport_no",
                 "work_permit_expiry",
                 "work_permit_no",    
                 "HRA",
