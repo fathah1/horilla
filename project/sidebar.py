@@ -44,9 +44,7 @@ SUBMENUS = [
 ]
 
 
-def menu_accessibilty(
-    request, _menu: str = "", user_perms: PermWrapper = [], *args, **kwargs
-) -> bool:
+def menu_accessibilty(request, _menu: str = "", user_perms: PermWrapper = [], *args, **kwargs) -> bool:
     user = request.user
     return (
         "project" in user_perms
@@ -74,8 +72,7 @@ def dashboard_accessibility(request, submenu, user_perms, *args, **kwargs):
 
 def project_accessibility(request, submenu, user_perms, *args, **kwargs):
     user = request.user
-    if (
-        user.has_perm("project.view_project")
+    if (user.has_perm("project.view_project")
         # or has_subordinates(request)
         or any_project_manager(user)
         or any_project_member(user)

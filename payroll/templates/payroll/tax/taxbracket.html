@@ -2,7 +2,7 @@
 <div class="oh-sticky-table__table">
   <div class="oh-sticky-table__thead">
     <div class="oh-sticky-table__tr">
-      <div class="oh-sticky-table__th">{% trans "Filing Status" %}</div>
+      <!-- <div class="oh-sticky-table__th">{% trans "Filing Status" %}</div> -->
       <div class="oh-sticky-table__th">{% trans "Min. Income" %}</div>
       <div class="oh-sticky-table__th">{% trans "Max. Income" %}</div>
       <div class="oh-sticky-table__th">{% trans "Tax Rate" %}</div>
@@ -12,7 +12,7 @@
   <div class="oh-sticky-table__tbody">
     {% for tax_bracket in tax_brackets %}
     <div class="oh-sticky-table__tr" draggable="true">
-      <div class="oh-sticky-table__td">{{tax_bracket.filing_status_id}}</div>
+      <!-- <div class="oh-sticky-table__td">{{tax_bracket.filing_status_id}}</div> -->
       <div class="oh-sticky-table__td">{{tax_bracket.min_income|stringformat:".2f"}}</div>
       <div class="oh-sticky-table__td">{{tax_bracket.max_income|stringformat:".2f"}}</div>
       <div class="oh-sticky-table__td">{{ tax_bracket.tax_rate|stringformat:".2f" }}%</div>

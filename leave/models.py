@@ -164,7 +164,7 @@ WEEK_DAYS = [
 class LeaveType(HorillaModel):
     icon = models.ImageField(null=True, blank=True, upload_to="leave/leave_icon")
     leave_allowance = models.JSONField(default=list, blank=True)
-    name = models.CharField(max_length=100, null=False)
+    name = models.CharField(max_length=150, null=False)
     description = models.TextField(blank=True ,max_length=255, null=False,default="")
     color = models.CharField(null=True, max_length=30)
     payment = models.CharField(max_length=30, choices=PAYMENT, default="unpaid")

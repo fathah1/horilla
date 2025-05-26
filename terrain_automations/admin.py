@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from horilla_automations.models import MailAutomation
+from terrain_automations.models import MailAutomation
 
 # Register your models here.
 

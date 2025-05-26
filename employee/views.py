@@ -121,13 +121,13 @@ from horilla.group_by import group_by_queryset
 from horilla.horilla_settings import HORILLA_DATE_FORMATS
 from horilla.methods import get_horilla_model_class
 from horilla_audit.models import AccountBlockUnblock, HistoryTrackingFields
-from horilla_documents.forms import (
+from terrain_documents.forms import (
     DocumentForm,
     DocumentRejectForm,
     DocumentRequestForm,
     DocumentUpdateForm,
 )
-from horilla_documents.models import Document, DocumentRequest
+from terrain_documents.models import Document, DocumentRequest
 from notifications.signals import notify
 
 
@@ -250,7 +250,7 @@ def self_info_update(request):
                     instance.badge_id = badge_id
                 instance.save()
                 messages.success(request, _("Profile updated."))
-        elif request.POST.get("any_other_code1") is not None:
+        elif request.POST.get("IBAN") is not None:
             instance = EmployeeBankDetails.objects.filter(employee_id=employee).first()
             bank_form = EmployeeBankDetailsForm(request.POST, instance=instance)
             if bank_form.is_valid():
@@ -430,7 +430,7 @@ def shift_tab(request, emp_id):
 
 
 @login_required
-@manager_can_enter("horilla_documents.view_documentrequest")
+@manager_can_enter("terrain_documents.view_documentrequest")
 def document_request_view(request):
     """
     This function is used to view documents requests of employees.
@@ -446,7 +446,7 @@ def document_request_view(request):
     documents = Document.objects.filter(document_request_id__isnull=False)
     documents = filtersubordinates(
         request=request,
-        perm="horilla_documents.view_documentrequest",
+        perm="terrain_documents.view_documentrequest",
         queryset=documents,
     )
     documents = group_by_queryset(
@@ -466,7 +466,7 @@ def document_request_view(request):
 
 @login_required
 @hx_request_required
-@manager_can_enter("horilla_documents.view_documentrequest")
+@manager_can_enter("terrain_documents.view_documentrequest")
 def document_filter_view(request):
     """
     This method is used to filter employee.
@@ -499,7 +499,7 @@ def document_filter_view(request):
 
 @login_required
 @hx_request_required
-@manager_can_enter("horilla_documents.add_documentrequest")
+@manager_can_enter("terrain_documents.add_documentrequest")
 def document_request_create(request):
     """
     This function is used to create document requests of an employee in employee requests view.
@@ -510,11 +510,11 @@ def document_request_create(request):
     Returns: return document_request_create_form template
     """
     form = DocumentRequestForm()
-    form = choosesubordinates(request, form, "horilla_documents.add_documentrequest")
+    form = choosesubordinates(request, form, "terrain_documents.add_documentrequest")
     if request.method == "POST":
         form = DocumentRequestForm(request.POST)
         form = choosesubordinates(
-            request, form, "horilla_documents.add_documentrequest"
+            request, form, "terrain_documents.add_documentrequest"
         )
         if form.is_valid():
             form = form.save()
@@ -544,7 +544,7 @@ def document_request_create(request):
 
 @login_required
 @hx_request_required
-@manager_can_enter("horilla_documents.change_documentrequest")
+@manager_can_enter("terrain_documents.change_documentrequest")
 def document_request_update(request, id):
     """
     This function is used to update document requests of an employee in employee requests view.
@@ -578,7 +578,7 @@ def document_request_update(request, id):
 
 @login_required
 @hx_request_required
-@owner_can_enter("horilla_documents.view_document", Employee)
+@owner_can_enter("terrain_documents.view_document", Employee)
 def document_tab(request, emp_id):
     """
     This function is used to view documents tab of an employee in employee individual
@@ -604,7 +604,7 @@ def document_tab(request, emp_id):
 
 @login_required
 @hx_request_required
-@owner_can_enter("horilla_documents.add_document", Employee)
+@owner_can_enter("terrain_documents.add_document", Employee)
 def document_create(request, emp_id):
     """
     This function is used to create documents from employee individual & profile view.
@@ -666,7 +666,7 @@ def document_delete(request, id):
     """
     try:
         document = Document.objects.filter(id=id)
-        if not request.user.has_perm("horilla_documents.delete_document"):
+        if not request.user.has_perm("terrain_documents.delete_document"):
             document = document.filter(
                 employee_id__employee_user_id=request.user
             ).exclude(document_request_id__isnull=False)
@@ -807,7 +807,7 @@ def get_content_type(file_extension):
 
 @login_required
 @hx_request_required
-@manager_can_enter("horilla_documents.add_document")
+@manager_can_enter("terrain_documents.add_document")
 def document_approve(request, id):
     """
     This function used to view the approve uploaded document.
@@ -832,7 +832,7 @@ def document_approve(request, id):
 
 @login_required
 @hx_request_required
-@manager_can_enter("horilla_documents.add_document")
+@manager_can_enter("terrain_documents.add_document")
 def document_reject(request, id):
     """
     This function used to view the reject uploaded document.
@@ -867,7 +867,7 @@ def document_reject(request, id):
 
 
 @login_required
-@manager_can_enter("horilla_documents.add_document")
+@manager_can_enter("terrain_documents.add_document")
 def document_bulk_approve(request):
     """
     This function used to view the approve uploaded document.
@@ -888,7 +888,7 @@ def document_bulk_approve(request):
 
 
 @login_required
-@manager_can_enter("horilla_documents.add_document")
+@manager_can_enter("terrain_documents.add_document")
 def document_bulk_reject(request):
     """
     This function used to view the reject uploaded document.

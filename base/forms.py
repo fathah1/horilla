@@ -2007,7 +2007,7 @@ excluded_fields = [
     "created_by",
     "modified_by",
     "additional_data",
-    "horilla_history",
+    "terrain_history",
     "additional_data",
 ]
 

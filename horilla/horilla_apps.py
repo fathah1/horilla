@@ -11,10 +11,10 @@ INSTALLED_APPS.append("accessibility")
 INSTALLED_APPS.append("horilla_audit")
 INSTALLED_APPS.append("horilla_widgets")
 INSTALLED_APPS.append("horilla_crumbs")
-INSTALLED_APPS.append("horilla_documents")
+INSTALLED_APPS.append("terrain_documents")
 INSTALLED_APPS.append("haystack")
 INSTALLED_APPS.append("horilla_views")
-INSTALLED_APPS.append("horilla_automations")
+INSTALLED_APPS.append("terrain_automations")
 INSTALLED_APPS.append("auditlog")
 INSTALLED_APPS.append("biometric")
 INSTALLED_APPS.append("helpdesk")
@@ -52,6 +52,7 @@ SIDEBARS = [
     "leave",
     "payroll",
     "pms",
+    "project",
     "offboarding",
     "asset",
     "helpdesk",

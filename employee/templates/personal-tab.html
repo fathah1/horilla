@@ -295,10 +295,10 @@
                 <li class="oh-profile__card-info-item">
                   <span class="oh-profile__info-label mb-1">
                     <ion-icon name="information-outline"></ion-icon>
-                    <span>{% trans "Bank Code" %} #1</span>
+                    <span>{% trans "IBAN" %}</span>
                   </span>
                   <span class="oh-profile__info-value"
-                    >{{employee.employee_bank_details.any_other_code1}}</span
+                    >{{employee.employee_bank_details.IBAN}}</span
                   >
                 </li>
               </ul>
@@ -319,10 +319,10 @@
                 <li class="oh-profile__card-info-item">
                   <span class="oh-profile__info-label mb-1">
                     <ion-icon name="information-outline"></ion-icon>
-                    <span>{% trans "Bank Code" %} #2</span>
+                    <span>{% trans "SWIFT code" %} #2</span>
                   </span>
                   <span class="oh-profile__info-value"
-                    >{{employee.employee_bank_details.any_other_code2}}</span
+                    >{{employee.employee_bank_details.SWIFT}}</span
                   >
                 </li>
                 <li class="oh-profile__card-info-item">

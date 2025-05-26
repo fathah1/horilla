@@ -1,10 +1,10 @@
 """
-horilla_automations/urls.py
+terrain_automations/urls.py
 """
 
 from django.urls import path
 
-from horilla_automations.views import cbvs, views
+from terrain_automations.views import cbvs, views
 
 urlpatterns = [
     path(

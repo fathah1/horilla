@@ -555,8 +555,8 @@ excel_columns = [
     ("employee_id__employee_bank_details__bank_name", _("Bank Name")),
     ("employee_id__employee_bank_details__branch", _("Branch")),
     ("employee_id__employee_bank_details__account_number", _("Account Number")),
-    ("employee_id__employee_bank_details__any_other_code1", _("Bank Code #1")),
-    ("employee_id__employee_bank_details__any_other_code2", _("Bank Code #2")),
+    ("employee_id__employee_bank_details__IBAN", _("IBAN")),
+    ("employee_id__employee_bank_details__SWIFT", _("SWIFT")),
     ("employee_id__employee_bank_details__country", _("Country")),
     ("employee_id__employee_bank_details__state", _("State")),
     ("employee_id__employee_bank_details__city", _("City")),
@@ -600,7 +600,6 @@ class ContractExportFieldForm(forms.Form):
             "contract_end_date",
             "wage_type",
             "wage",
-            "filing_status",
             "contract_status",
         ],
     )

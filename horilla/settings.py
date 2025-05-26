@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "leave",
     "pms",
     "onboarding",
+    "project",
     "asset",
     "attendance",
     "payroll",

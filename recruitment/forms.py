@@ -944,7 +944,7 @@ exclude_fields = [
     "modified_by",
     "is_active",
     "last_updated",
-    "horilla_history",
+    "terrain_history",
 ]
 
 

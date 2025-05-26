@@ -469,8 +469,8 @@ class BankDetailsCreationForm(ModelForm):
     country = forms.CharField(required=True, label="Country")
     state = forms.CharField(required=True, label="State")
     city = forms.CharField(required=True, label="City")
-    any_other_code1 = forms.CharField(required=True, label="Code #1")
-    any_other_code2 = forms.CharField(required=False, label="Code #2")
+    IBAN = forms.CharField(required=True, label="IBAN")
+    SWIFT = forms.CharField(required=False, label="SWIFT")
 
     class Meta:
         """

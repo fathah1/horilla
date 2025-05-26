@@ -18,7 +18,7 @@ from base.methods import filtersubordinatesemployeemodel
 from employee.models import DisciplinaryAction, Employee, Policy
 from horilla.filters import FilterSet, HorillaFilterSet, filter_by_name
 from horilla.horilla_middlewares import _thread_locals
-from horilla_documents.models import Document
+from terrain_documents.models import Document
 from horilla_views.templatetags.generic_template_filters import getattribute
 
 
@@ -53,10 +53,10 @@ class EmployeeFilter(HorillaFilterSet):
     employee_first_name = django_filters.CharFilter(lookup_expr="icontains")
     employee_last_name = django_filters.CharFilter(lookup_expr="icontains")
     country = django_filters.CharFilter(lookup_expr="icontains")
-    department = django_filters.CharFilter(
-        field_name="employee_work_info__department_id__department",
-        lookup_expr="icontains",
-    )
+    
+    department = django_filters.ModelMultipleChoiceFilter(queryset=Employee.objects.all(),field_name="employee_work_info__department_id__department")
+
+
 
     is_active = django_filters.ChoiceFilter(
         field_name="is_active",

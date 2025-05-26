@@ -381,7 +381,7 @@
 										<li class="oh-profile__card-info-item">
 											<span class="oh-profile__info-label mb-1">
 												<ion-icon name="calendar-outline"></ion-icon>
-												<span>{% trans "E-ID Expiry" %}</span>
+												<span>{% trans "Emirate ID Expiry" %}</span>
 											</span>
 											<span
 												class="oh-profile__info-value dateformat_changer">{{employee.employee_work_info.emirates_id_expiry|default:_("None")}}</span>
@@ -440,12 +440,13 @@
 
 								<li class="oh-profile__card-info-item">
 									<span class="oh-profile__info-label mb-1">
-										<ion-icon name="location-outline"></ion-icon>
-										<span>{% trans "Branch" %}</span>
+										<ion-icon name="information-outline"></ion-icon>
+										<span>{% trans "SWIFT" %}</span>
 									</span>
 									<span
-										class="oh-profile__info-value">{{employee.employee_bank_details.branch|default:_("None")}}</span>
+										class="oh-profile__info-value">{{employee.employee_bank_details.SWIFT|default:_("None")}}</span>
 								</li>
+					
 
 								<li class="oh-profile__card-info-item">
 									<span class="oh-profile__info-label mb-1">
@@ -456,14 +457,16 @@
 										class="oh-profile__info-value">{{employee.employee_bank_details.address|default:_("None")}}</span>
 								</li>
 
-								<li class="oh-profile__card-info-item">
+											<li class="oh-profile__card-info-item">
 									<span class="oh-profile__info-label mb-1">
-										<ion-icon name="information-outline"></ion-icon>
-										<span>{% trans "Bank Code" %} #2</span>
+										<ion-icon name="location-outline"></ion-icon>
+										<span>{% trans "Branch" %}</span>
 									</span>
 									<span
-										class="oh-profile__info-value">{{employee.employee_bank_details.any_other_code2|default:_("None")}}</span>
+										class="oh-profile__info-value">{{employee.employee_bank_details.branch|default:_("None")}}</span>
 								</li>
+
+
 
 							</ul>
 						</div>
@@ -481,10 +484,10 @@
 								<li class="oh-profile__card-info-item">
 									<span class="oh-profile__info-label mb-1">
 										<ion-icon name="information-outline"></ion-icon>
-										<span>{% trans "Bank Code" %} #1</span>
+										<span>{% trans "IBAN" %}</span>
 									</span>
 									<span
-										class="oh-profile__info-value">{{employee.employee_bank_details.any_other_code1|default:_("None")}}</span>
+										class="oh-profile__info-value">{{employee.employee_bank_details.IBAN|default:_("None")}}</span>
 								</li>
 
 								<li class="oh-profile__card-info-item">

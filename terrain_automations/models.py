@@ -94,13 +94,13 @@ class MailAutomation(HorillaModel):
             display = display[:-1]
             mappings.append(display)
         return render_template(
-            "horilla_automations/mail_to.html", {"instance": self, "mappings": mappings}
+            "terrain_automations/mail_to.html", {"instance": self, "mappings": mappings}
         )
 
     def get_mail_cc_display(self):
         employees = self.also_sent_to.all()
         return render_template(
-            "horilla_automations/mail_cc.html", {"employees": employees}
+            "terrain_automations/mail_cc.html", {"employees": employees}
         )
 
     def detailed_url(self):
@@ -108,7 +108,7 @@ class MailAutomation(HorillaModel):
 
     def conditions(self):
         return render_template(
-            "horilla_automations/conditions.html", {"instance": self}
+            "terrain_automations/conditions.html", {"instance": self}
         )
 
     def delete_url(self):

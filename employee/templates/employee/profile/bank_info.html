@@ -1,4 +1,4 @@
-{% load i18n %}
+={% load i18n %}
 <div class="oh-general__tab-target oh-profile-section mb-4 d-none" id="bank">
     <div class="oh-profile-section__card">
         <form action="" method="post">
@@ -30,9 +30,9 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="oh-input-group">
-                        <label class="oh-label">{% trans "Bank Code" %} #1</label>
-                        {{bank_form.any_other_code1}}
-                        {{bank_form.any_other_code1.errors}}
+                        <label class="oh-label">{% trans "IBAN" %}</label>
+                        {{bank_form.IBAN}}
+                        {{bank_form.IBAN.errors}}
                     </div>
                 </div>
             </div>
@@ -71,9 +71,9 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="oh-input-group">
-                        <label class="oh-label">{% trans "Bank Code" %} #2</label>
-                        {{bank_form.any_other_code2}}
-                        {{bank_form.any_other_code2.errors}}
+                        <label class="oh-label">{% trans "SWIFT" %} #2</label>
+                        {{bank_form.SWIFT}}
+                        {{bank_form.SWIFT.errors}}
                     </div>
                 </div>
             </div>

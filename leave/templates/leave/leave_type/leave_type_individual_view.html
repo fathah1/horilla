@@ -168,16 +168,26 @@
                     </div>
                 </div>
 
-                <div class="oh-timeoff-modal__stats">
+                <!-- <div class="oh-timeoff-modal__stats">
                     <div class="oh-timeoff-modal__stat">
                         <span class="oh-timeoff-modal__stat-title">{% trans "Description" %}</span>
                         <div class="oh-timeoff-modal__stat-count">
                             {{leave_type.description}}
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
             </div>
+
+            <div class="oh-timeoff-modal__stat w-100 mt-3">
+                <span class="oh-timeoff-modal__stat-title d-block mb-1">{% trans "Description" %}</span>
+                <div class="oh-timeoff-modal__stat-count d-block">
+                    {{ leave_type.description }}
+                </div>
+            </div>
+            
+
+
             <div class="oh-modal__button-container text-center mt-3">
                 {% if perms.leave.change_leavetype and perms.leave.add_availableleave and perms.leave.delete_leavetype %}
                     <div class="oh-btn-group">
@@ -211,9 +221,9 @@
                     </div>
                 {% endif %}
 
-
-
             </div>
+
+            
         </div>
     </div>
 {% else %}

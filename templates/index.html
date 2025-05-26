@@ -86,6 +86,31 @@
 
     </style>
 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        @font-face {
+        font-family: 'Gotham';
+        src: url("{% static 'fonts/gotham.woff2' %}") format('woff2'),
+            url("{% static 'fonts/gotham.woff' %}") format('woff');
+        font-weight: normal;
+        font-style: normal;
+        }
+        
+        @font-face {
+        font-family: 'DIN Pro';
+        src: url("{% static 'fonts/dinpro.woff2' %}") format('woff2'),
+            url("{% static 'fonts/dinpro.woff' %}") format('woff');
+        font-weight: normal;
+        font-style: normal;
+        }
+        
+        .note-editable {
+        font-family: 'Gotham', 'DIN Pro', 'Montserrat', sans-serif;
+        }
+    </style>
+
+
 
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -100,29 +125,7 @@
     <script src="{% static 'build/js/driver.js' %}"></script>
     <script src="{% static 'build/js/clearFilter.js' %}"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        @font-face {
-          font-family: 'Gotham';
-          src: url("{% static 'fonts/gotham.woff2' %}") format('woff2'),
-               url("{% static 'fonts/gotham.woff' %}") format('woff');
-          font-weight: normal;
-          font-style: normal;
-        }
-        
-        @font-face {
-          font-family: 'DIN Pro';
-          src: url("{% static 'fonts/dinpro.woff2' %}") format('woff2'),
-               url("{% static 'fonts/dinpro.woff' %}") format('woff');
-          font-weight: normal;
-          font-style: normal;
-        }
-        
-        .note-editable {
-          font-family: 'Gotham', 'DIN Pro', 'Montserrat', sans-serif;
-        }
-    </style>
 
     <!-- Popper.JS -->
     <!-- Bootstrap JS -->
@@ -268,7 +271,7 @@
             <!-- End of Nav bar -->
 
             <!-- Start of main section -->
-            <div id='main-section' style="background:#ffffff; margin-top: 40px;">
+            <div id='main-section' style="background:#ffffff; margin-top: 40px">
                 <div id="tripple-loader-contaner"
                     class="d-flex justify-content-center align-items-center  tripple-loader-contaner--visible"
                     style="height:90vh;">

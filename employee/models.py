@@ -758,21 +758,24 @@ class EmployeeBankDetails(HorillaModel):
         verbose_name=_("Employee"),
     )
     bank_name = models.CharField(max_length=50)
+
     account_number = models.CharField(
         max_length=50,
         null=False,
         blank=False,
         default="",
     )
+
     branch = models.CharField(max_length=50)
     address = models.TextField(max_length=255)
     country = models.CharField(max_length=50, blank=True, null=True)
     state = models.CharField(max_length=50, blank=True)
     city = models.CharField(max_length=50, blank=True)
-    any_other_code1 = models.CharField(max_length=50, verbose_name="Bank Code #1")
-    any_other_code2 = models.CharField(
-        max_length=50, null=True, blank=True, verbose_name="Bank Code #2"
-    )
+
+    IBAN = models.CharField(max_length=34, verbose_name="IBAN No")
+    SWIFT = models.CharField(max_length=11, null=True, blank=True, verbose_name="SWIFT/BIC code")
+    Routing = models.CharField(max_length=30, null=True, blank=True, verbose_name="Routing No")
+
     additional_info = models.JSONField(null=True, blank=True)
     objects = HorillaCompanyManager(
         related_company_field="employee_id__employee_work_info__company_id"

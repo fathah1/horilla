@@ -259,7 +259,7 @@ class Contract(HorillaModel):
         default=True,
         verbose_name=_("Calculate Daily Leave Amount"),
         help_text=_(
-            "Leave amount will be calculated by dividing the basic pay by number of working days."
+            "Leave amount will be calculated by dividing the total salary by number of days in the month."
         ),
     )
     deduction_for_one_leave_amount = models.FloatField(

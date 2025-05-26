@@ -64,7 +64,7 @@ class HorillaModel(models.Model):
         verbose_name=_("Modified By"),
         related_name="%(class)s_modified_by",
     )
-    horilla_history = AuditlogHistoryField()
+    terrain_history = AuditlogHistoryField()
     objects = models.Manager()
     is_active = models.BooleanField(default=True, verbose_name=_("Is Active"))
 

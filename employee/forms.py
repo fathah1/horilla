@@ -442,12 +442,12 @@ class EmployeeBankDetailsForm(ModelForm):
             "bank_name",
             "account_number",
             "branch",
-            "any_other_code1",
+            "IBAN",
             "address",
             "country",
             "state",
             "city",
-            "any_other_code2",
+            "SWIFT",
         )
         exclude = ["employee_id", "is_active", "additional_info"]
 
@@ -523,8 +523,8 @@ excel_columns = [
     ("employee_bank_details__bank_name", trans("Bank Name")),
     ("employee_bank_details__branch", trans("Branch")),
     ("employee_bank_details__account_number", trans("Account Number")),
-    ("employee_bank_details__any_other_code1", trans("Bank Code #1")),
-    ("employee_bank_details__any_other_code2", trans("Bank Code #2")),
+    ("employee_bank_details__IBAN", trans("IBAN")),
+    ("employee_bank_details__SWIFT", trans("SWIFT")),
     ("employee_bank_details__country", trans("Bank Country")),
     ("employee_bank_details__state", trans("Bank State")),
     ("employee_bank_details__city", trans("Bank City")),
