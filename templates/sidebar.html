@@ -52,6 +52,16 @@ function initializeSummernote(candId,searchWords,) {
 }
 </script>
 {% endverbatim %}
+
+<style>
+  .oh-sidebar__submenu-items_re li::before {
+    content: "★";
+    color:rgb(231, 105, 85);
+    font-size: 15px;
+    padding-right: 4px;
+  }
+</style>
+
 <div
   class="oh-sidebar"
   style="position: -webkit-sticky; position: sticky; top: 0;height:100vh; overflow-x:hidden;"
@@ -129,10 +139,7 @@ function initializeSummernote(candId,searchWords,) {
         </a>
       </li>
       {% for menues in sidebar %}
-      <li
-        class="oh-sidebar__menu-item"
-        x-data="{ isOpen: getOpenState('{{menues.app}}GenericNav') }"
-      >
+      <li class="oh-sidebar__menu-item" x-data="{ isOpen: getOpenState('{{menues.app}}GenericNav') }">
         <a
           class="oh-sidebar__menu-link"
           data-id="{{menues.app}}GenericNav"
@@ -253,7 +260,7 @@ function initializeSummernote(candId,searchWords,) {
               >
             </li>
             {% endif %}
-            {% if "terrain_automations"|app_installed and perms.terrain_automations.view_mailautomation %}
+            {% if "horilla_automations"|app_installed and perms.horilla_automations.view_mailautomation %}
             <li class="oh-sidebar__submenu-item">
               <a
                 class="oh-sidebar__submenu-link"
