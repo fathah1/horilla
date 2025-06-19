@@ -34,6 +34,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from base.forms import Form
+from base.forms import ModelForm as BaseModelForm
 from base.methods import reload_queryset
 from employee.filters import EmployeeFilter
 from employee.models import Employee
@@ -48,6 +49,7 @@ from recruitment.models import (
     CandidateDocumentRequest,
     InterviewSchedule,
     JobPosition,
+    LinkedInAccount,
     Recruitment,
     RecruitmentSurvey,
     RejectedCandidate,
@@ -224,7 +226,7 @@ class DropDownForm(forms.ModelForm):
                 field.widget.attrs.update({"class": "oh-switch__checkbox "})
 
 
-class RecruitmentCreationForm(ModelForm):
+class RecruitmentCreationForm(BaseModelForm):
     """
     Form for Recruitment model
     """
@@ -235,7 +237,10 @@ class RecruitmentCreationForm(ModelForm):
     #     label=_("Survey Templates"),
     #     required=False,
     # )
-
+    # linkedin_account_id = forms.ModelChoiceField(
+    #     queryset=LinkedInAccount.objects.filter(is_active=True)
+    #     label=_('')
+    # )
     class Meta:
         """
         Meta class to add the additional info
@@ -243,20 +248,19 @@ class RecruitmentCreationForm(ModelForm):
 
         model = Recruitment
         fields = "__all__"
-        exclude = ["is_active"]
+        exclude = ["is_active", "linkedin_post_id"]
         widgets = {
             "start_date": forms.DateInput(attrs={"type": "date"}),
             "end_date": forms.DateInput(attrs={"type": "date"}),
             "description": forms.Textarea(attrs={"data-summernote": ""}),
         }
-        labels = {"description": _("Description"), "vacancy": _("Vacancy")}
 
     def as_p(self, *args, **kwargs):
         """
         Render the form fields as HTML table rows with Bootstrap styling.
         """
         context = {"form": self}
-        table_html = render_to_string("attendance_form.html", context)
+        table_html = render_to_string("horilla_form.html", context)
         return table_html
 
     def __init__(self, *args, **kwargs):
@@ -273,7 +277,7 @@ class RecruitmentCreationForm(ModelForm):
                     filter_template_path="employee_filters.html",
                     required=True,
                 ),
-                label="Employee",
+                label=f"{self._meta.model()._meta.get_field('recruitment_managers').verbose_name}",
             )
 
         skill_choices = [("", _("---Choose Skills---"))] + list(
@@ -281,6 +285,12 @@ class RecruitmentCreationForm(ModelForm):
         )
         self.fields["skills"].choices = skill_choices
         self.fields["skills"].choices += [("create", _("Create new skill "))]
+        self.fields["linkedin_account_id"].queryset = LinkedInAccount.objects.filter(
+            is_active=True
+        )
+        self.fields["publish_in_linkedin"].widget.attrs.update(
+            {"onchange": "toggleLinkedIn()"}
+        )
 
     # def create_option(self, *args,**kwargs):
     #     option = super().create_option(*args,**kwargs)
@@ -301,10 +311,21 @@ class RecruitmentCreationForm(ModelForm):
             raise forms.ValidationError(
                 _("Job position is required if the recruitment is publishing.")
             )
+        if (
+            self.cleaned_data.get("publish_in_linkedin")
+            and not self.cleaned_data["linkedin_account_id"]
+        ):
+            raise forms.ValidationError(
+                {
+                    "linkedin_account_id": _(
+                        "LinkedIn account is required for publishing."
+                    )
+                }
+            )
         super().clean()
 
 
-class StageCreationForm(ModelForm):
+class StageCreationForm(BaseModelForm):
     """
     Form for Stage model
     """
@@ -334,7 +355,7 @@ class StageCreationForm(ModelForm):
                     filter_template_path="employee_filters.html",
                     required=True,
                 ),
-                label="Employee",
+                label=f"{self._meta.model()._meta.get_field('stage_managers').verbose_name}",
             )
 
     def clean(self):
@@ -345,7 +366,7 @@ class StageCreationForm(ModelForm):
         super().clean()
 
 
-class CandidateCreationForm(ModelForm):
+class CandidateCreationForm(BaseModelForm):
     """
     Form for Candidate model
     """
@@ -398,13 +419,6 @@ class CandidateCreationForm(ModelForm):
         widgets = {
             "scheduled_date": forms.DateInput(attrs={"type": "date"}),
             "dob": forms.DateInput(attrs={"type": "date"}),
-        }
-        labels = {
-            "name": _("Name"),
-            "email": _("Email"),
-            "mobile": _("Mobile"),
-            "address": _("Address"),
-            "zip": _("Zip"),
         }
 
     def save(self, commit: bool = ...):
@@ -882,12 +896,10 @@ class SurveyPreviewForm(forms.Form):
         # self
 
 
-class TemplateForm(ModelForm):
+class TemplateForm(BaseModelForm):
     """
     TemplateForm
     """
-
-    verbose_name = "Template"
 
     class Meta:
         model = SurveyTemplate
@@ -944,7 +956,7 @@ exclude_fields = [
     "modified_by",
     "is_active",
     "last_updated",
-    "terrain_history",
+    "horilla_history",
 ]
 
 
@@ -974,8 +986,7 @@ class CandidateExportForm(forms.Form):
     )
 
 
-class SkillZoneCreateForm(ModelForm):
-    verbose_name = "Skill Zone"
+class SkillZoneCreateForm(BaseModelForm):
 
     class Meta:
         """
@@ -986,17 +997,9 @@ class SkillZoneCreateForm(ModelForm):
         fields = "__all__"
         exclude = ["is_active"]
 
-    def as_p(self, *args, **kwargs):
-        """
-        Render the form fields as HTML table rows with Bootstrap styling.
-        """
-        context = {"form": self}
-        table_html = render_to_string("common_form.html", context)
-        return table_html
 
-
-class SkillZoneCandidateForm(ModelForm):
-    verbose_name = "Skill Zone Candidate"
+class SkillZoneCandidateForm(BaseModelForm):
+    verbose_name = _("Skill Zone Candidate")
     candidate_id = forms.ModelMultipleChoiceField(
         queryset=Candidate.objects.all(),
         widget=forms.SelectMultiple,
@@ -1043,30 +1046,28 @@ class SkillZoneCandidateForm(ModelForm):
                 + self.instance.skill_zone_id.title
             )
 
-    def save(self, commit: bool = ...) -> Any:
-        super().save(commit)
-        other_candidates = list(
-            set(self.data.getlist("candidate_id"))
-            - {
-                str(self.instance.candidate_id.id),
-            }
-        )
-        if commit:
-            cand = self.instance
-            for id in other_candidates:
-                cand.pk = cand.pk + 1
-                cand.id = cand.pk
-                cand.candidate_id = Candidate.objects.get(id=id)
-                try:
-                    super(SkillZoneCandidate, cand).save()
-                except Exception as e:
-                    logger.error(e)
+    def save(self, commit: bool = True) -> SkillZoneCandidate:
 
-        return other_candidates
+        if not self.instance.pk:
+            candidates = Candidate.objects.filter(
+                id__in=list((self.data.getlist("candidate_id")))
+            )
+            skill_zone = self.cleaned_data["skill_zone_id"]
+            reason = self.cleaned_data["reason"]
+            for candidate in candidates:
+                zone_cand = SkillZoneCandidate()
+                zone_cand.skill_zone_id = skill_zone
+                zone_cand.candidate_id = candidate
+                zone_cand.reason = reason
+                zone_cand.save()
+        else:
+            instance = super().save()
+
+        return self.instance
 
 
-class ToSkillZoneForm(ModelForm):
-    verbose_name = "Add To Skill Zone"
+class ToSkillZoneForm(BaseModelForm):
+    verbose_name = _("Add To Skill Zone")
     skill_zone_ids = forms.ModelMultipleChoiceField(
         queryset=SkillZone.objects.all(), label=_("Skill Zones")
     )
@@ -1166,12 +1167,10 @@ class RejectedCandidateForm(ModelForm):
         self.fields["candidate_id"].widget = self.fields["candidate_id"].hidden_widget()
 
 
-class ScheduleInterviewForm(ModelForm):
+class ScheduleInterviewForm(BaseModelForm):
     """
     ScheduleInterviewForm
     """
-
-    verbose_name = "Schedule Interview"
 
     class Meta:
         model = InterviewSchedule
@@ -1310,3 +1309,19 @@ class CandidateDocumentForm(ModelForm):
         context = {"form": self}
         table_html = render_to_string("common_form.html", context)
         return table_html
+
+
+class LinkedInAccountForm(BaseModelForm):
+    """
+    LinkedInAccount form
+    """
+
+    class Meta:
+        model = LinkedInAccount
+        fields = [
+            "username",
+            "email",
+            "api_token",
+            "is_active",
+            "company_id",
+        ]

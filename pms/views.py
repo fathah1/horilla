@@ -2689,6 +2689,8 @@ def dashboard_key_result_status(request):
 @login_required
 def dashboard_feedback_status(request):
     """feedback dashboard data"""
+
+    print("herer in dasboard feedback status");
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
     if is_ajax and request.method == "GET":
         feedback_status = Feedback.STATUS_CHOICES

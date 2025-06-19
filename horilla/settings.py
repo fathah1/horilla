@@ -30,7 +30,7 @@ env = environ.Env(
         "django-insecure-j8op9)1q8$1&0^s&p*_0%d#pr@w9qj@1o=3#@d=a(^@9@zd@%j",
     ),
     ALLOWED_HOSTS=(list, ["*"]),
-    CSRF_TRUSTED_ORIGINS=(list, ["https://d94a-2001-8f8-1269-1838-400-bfec-66ea-f877.ngrok-free.app"]),
+    CSRF_TRUSTED_ORIGINS=(list, ["http://127.0.0.1:8000"]),
 )
 
 env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)

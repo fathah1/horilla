@@ -3,7 +3,7 @@ from django.apps import AppConfig
 from terrain_automations.signals import start_automation
 
 
-class HorillaAutomationConfig(AppConfig):
+class TerrainAutomationConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "terrain_automations"
 

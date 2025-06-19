@@ -9,6 +9,9 @@ from django.urls import path
 from payroll.models.models import Allowance, Deduction
 from payroll.views import component_views
 
+print("here here in componenet views");
+
+
 urlpatterns = [
     path(
         "allowances-deductions-tab/<int:emp_id>",

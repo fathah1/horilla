@@ -614,14 +614,14 @@ def view_gratuity(request):
 
 
 @login_required
-@hx_request_required
+# @hx_request_required
 
 
 def view_deduction(request):
     """
     This method is used render template to view all the deduction instances
     """
-
+    print("here in view code")
     deductions = Deduction.objects.exclude(only_show_under_employee=True)
     deduction_filter = DeductionFilter(request.GET)
     deductions = paginator_qry(deductions, request.GET.get("page"))

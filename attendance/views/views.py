@@ -879,22 +879,56 @@ def attendance_activity_delete(request, obj_id):
 @require_http_methods(["POST"])
 def attendance_activity_bulk_delete(request):
     """
-    This method is used to delete bulk of attendances
+    Deletes a bulk of AttendanceActivity records based on a list of IDs.
     """
-    ids = request.POST["ids"]
-    ids = json.loads(ids)
-    for attendance_id in ids:
+    try:
+        ids_json = request.POST.get("ids", "[]")
+
         try:
-            activity = AttendanceActivity.objects.get(id=attendance_id)
-            activity.delete()
+            ids = json.loads(ids_json)
+        except json.JSONDecodeError:
+            messages.error(request, _("Invalid list of IDs provided."))
+            return HttpResponse("<script>$('.filterButton')[0].click()</script>")
+
+        try:
+            ids = [int(i) for i in ids]
+        except (ValueError, TypeError):
+            messages.error(request, _("Invalid list of IDs provided."))
+            return HttpResponse("<script>$('.filterButton')[0].click()</script>")
+
+        if not ids:
+            messages.warning(
+                request, _("No attendance activities selected for deletion.")
+            )
+            return HttpResponse("<script>$('.filterButton')[0].click()</script>")
+
+        # Perform the delete operation in a transaction
+        with transaction.atomic():
+            activities = AttendanceActivity.objects.filter(id__in=ids)
+            count = activities.count()
+            activities.delete()
+
+        if count > 0:
             messages.success(
                 request,
-                _("{employee} activity deleted.").format(employee=activity.employee_id),
+                _("{count} attendance activities deleted successfully.").format(
+                    count=count
+                ),
+            )
+        else:
+            messages.info(
+                request,
+                _("No matching attendance activities were found to delete."),
             )
 
-        except (AttendanceActivity.DoesNotExist, OverflowError, ValueError):
-            messages.error(request, _("Attendance not found."))
-    return JsonResponse({"message": "Success"})
+    except Exception as e:
+        logger.exception("Error during bulk delete of attendance activities")
+        messages.error(
+            request,
+            _("Failed to delete attendance activities: {error}").format(error=str(e)),
+        )
+
+    return HttpResponse("<script>$('.filterButton')[0].click()</script>")
 
 
 def process_activity_dicts(activity_dicts):
@@ -2342,9 +2376,10 @@ def work_record_export(request):
         row_data = {"Employee": employee}
         for day, formatted_day in zip(all_date_objects, formatted_dates):
             if not day in leave_dates and day < date.today():
-                row_data[formatted_day] = record_lookup.get((employee, day), "EW")
+                row_data[formatted_day] = record_lookup.get((employee, day), "DFT")
             else:
-                row_data[formatted_day] = record_lookup.get((employee, day), "")
+                data = record_lookup.get((employee, day), "")
+                row_data[formatted_day] = data if data != "DFT" else ""
         data_rows.append(row_data)
 
     columns = ["Employee"] + formatted_dates
@@ -2369,7 +2404,9 @@ def work_record_export(request):
             "CONF": workbook.add_format(
                 {"bg_color": "#ed4c4c", "font_color": "#ffffff"}
             ),
-            "EW": workbook.add_format({"bg_color": "#a8b1ff", "font_color": "#ffffff"}),
+            "DFT": workbook.add_format(
+                {"bg_color": "#a8b1ff", "font_color": "#ffffff"}
+            ),
         }
 
         for row_idx, row in enumerate(df.itertuples(index=False), start=1):

@@ -25,11 +25,11 @@ SUBMENUS = [
         "redirect": reverse("view-allowance"),
         "accessibility": "payroll.sidebar.allowance_accessibility",
     },
-    # {
-    #     "menu": trans("Deductions"),
-    #     "redirect": reverse("view-deduction"),
-    #     # "accessibility": "payroll.sidebar.deduction_accessibility",
-    # },
+    {
+        "menu": trans("Deductions"),
+        "redirect": reverse("view-deduction"),
+        "accessibility": "payroll.sidebar.deduction_accessibility",
+    },
     {
         "menu": trans("Payslips"),
         "redirect": reverse("view-payslip"),
@@ -64,9 +64,8 @@ def allowance_accessibility(request, submenu, user_perms, *args, **kwargs):
     return request.user.has_perm("payroll.view_allowance")
 
 
-# def deduction_accessibility(request, submenu, user_perms, *args, **kwargs):
-#     print("here in accessibility")
-#     return request.user.has_perm("payroll.view_deduction")
+def deduction_accessibility(request, submenu, user_perms, *args, **kwargs):
+    return request.user.has_perm("payroll.view_deduction")
 
 # def gratuity_accessibility(request, submenu, user_perms, *args, **kwargs):
 #     return request.user.has_perm("payroll.view_deduction")

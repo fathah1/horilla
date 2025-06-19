@@ -5,6 +5,7 @@ This module is used to write views related to the survey features
 """
 
 import json
+import os
 from datetime import datetime
 from uuid import uuid4
 
@@ -47,6 +48,8 @@ from recruitment.pipeline_grouper import group_by_queryset
 from recruitment.views.paginator_qry import paginator_qry
 
 
+@login_required
+@is_recruitment_manager(perm="recruitment.add_recruitmentsurvey")
 def survey_form(request):
     """
     This method is used to render survey wform
@@ -57,12 +60,14 @@ def survey_form(request):
     return render(request, "survey/form.html", {"form": form})
 
 
-def survey_preview(request, title):
+@login_required
+@is_recruitment_manager(perm="recruitment.add_recruitmentsurvey")
+def survey_preview(request, pk=None):
     """
     Used to render survey form to the candidate
     """
-    # title = request.GET.get("title")
-    template = SurveyTemplate.objects.get(title=str(title))
+    title = request.GET.get("title")
+    template = SurveyTemplate.objects.get(title=title)
 
     form = SurveyPreviewForm(template=template).form
     return render(
@@ -76,6 +81,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
+@login_required
 def question_order_update(request):
     if request.method == "POST":
         # Extract data from the request
@@ -167,6 +173,9 @@ def candidate_survey(request):
                     {"form": form, "candidate": candidate},
                 )
             attachment_path = f"recruitment_attachment/{attachment.name}"
+            attachment_dir = os.path.dirname(default_storage.path(attachment_path))
+            if not os.path.exists(attachment_dir):
+                os.makedirs(attachment_dir)
             with default_storage.open(attachment_path, "wb+") as destination:
                 for chunk in attachment.chunks():
                     destination.write(chunk)
@@ -335,14 +344,23 @@ def application_form(request):
     resume_id = request.GET.get("resumeId")
     resume_obj = Resume.objects.filter(id=resume_id).first()
 
+    if request.method == "GET" and not recruitment_id:
+        messages.error(request, _("Recruitment ID is missing"))
+        return redirect("open-recruitments")
+
+    try:
+        recruitment = Recruitment.objects.filter(id=recruitment_id).first()
+        if not recruitment:
+            messages.error(request, _("Recruitment not found"))
+            return redirect("open-recruitments")
+    except (ValueError, OverflowError):
+        messages.error(request, _("Invalid Recruitment ID"))
+        return redirect("open-recruitments")
+
     if resume_obj:
         initial_data = {"resume": resume_obj.file.url if resume_obj else None}
         form = ApplicationForm(initial=initial_data)
 
-    if recruitment_id is not None:
-        recruitment = Recruitment.objects.filter(id=recruitment_id)
-        if recruitment.exists():
-            recruitment = recruitment.first()
     if request.POST:
 
         if "resume" not in request.FILES and resume_id:
@@ -367,7 +385,9 @@ def application_form(request):
             resume = request.FILES.get("resume")
             if resume:
                 resume_path = f"recruitment/resume/{resume.name}"
-
+                attachment_dir = os.path.dirname(default_storage.path(resume_path))
+                if not os.path.exists(attachment_dir):
+                    os.makedirs(attachment_dir)
                 with default_storage.open(resume_path, "wb+") as destination:
                     for chunk in resume.chunks():
                         destination.write(chunk)
@@ -488,7 +508,7 @@ def question_add(request):
     template = None
     title = request.GET.get("title")
     if title:
-        template = SurveyTemplate.objects.filter(title=title)
+        template = SurveyTemplate.objects.filter(title=title).first
 
     form = AddQuestionForm(initial={"template_ids": template})
     if request.method == "POST":

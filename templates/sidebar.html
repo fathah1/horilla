@@ -260,7 +260,8 @@ function initializeSummernote(candId,searchWords,) {
               >
             </li>
             {% endif %}
-            {% if "horilla_automations"|app_installed and perms.horilla_automations.view_mailautomation %}
+
+            {% if "terrain_automations"|app_installed and perms.terrain_automations.view_mailautomation %}
             <li class="oh-sidebar__submenu-item">
               <a
                 class="oh-sidebar__submenu-link"

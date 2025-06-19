@@ -53,7 +53,7 @@
     </div>
 </div>
 
-<section class="oh-wrapper oh-main__topbar" x-data="{searchShow: false}">
+<section class="oh-wrapper oh-main__topbar">
     <div class="oh-main__titlebar oh-main__titlebar--left">
         <h1 class="oh-main__titlebar-title fw-bold">
             <a href="{% url 'attendance-view' %}" class="text-dark">
@@ -88,19 +88,58 @@
     </div>
 </section>
 
-
-<div class="oh-wrapper-main">
-    <main :class="sidebarOpen ? 'oh-main__sidebar-visible' : ''">
-        <div class="oh-wrapper">
-            <div class="oh-404">
-                <img style="width: 190px; height: 200px" src="{% static 'images/ui/present.png' %}"
-                    class="oh-404__image mb-4" alt="Page not found. 404." />
-                <h5 class="oh-404__subtitle">
-                    {% trans "There are no attendance records to display." %}
-                </h5>
-            </div>
-        </div>
-    </main>
+<div class="oh-wrapper">
+    <div class="oh-empty">
+        <img src="{% static 'images/ui/search.svg' %}" class="oh-404__image" alt="Page not found. 404." />
+        <h1 class="oh-empty__title">{% trans "No Records found." %}</h1>
+        <p class="oh-empty__subtitle">{% trans "There are no attendance records to display." %}</p>
+    </div>
 </div>
+
+<span id="dynamicCreateBatchAttendanceSpan" hx-get="{% url 'create-batch-attendance' %}"
+    data-target="#dynamicCreateModal" data-toggle="oh-modal-toggle" hx-target="#dynamicCreateModalTarget"
+    hx-include="#attendanceRequestForm,#attendanceUpdateForm,#attendanceCreateForm"></span>
+<button hidden hx-post="{% url 'update-title' %}" hx-target="#objectDetailsModalTarget" id="updateTitleSpan"></button>
+
+<script>
+    function dateChange(selectElement) {
+        var selectedDate = selectElement.val();
+        let parentForm = selectElement.parents().closest("form");
+        var shiftId = parentForm.find("[name=shift_id]").val();
+
+        $.ajax({
+            type: "post",
+            url: "{% url 'update-date-details' %}",
+            data: {
+                csrfmiddlewaretoken: getCookie("csrftoken"),
+                attendance_date: selectedDate,
+                shift_id: shiftId,
+            },
+            success: function (response) {
+                parentForm.find("[name=minimum_hour]").val(response.minimum_hour);
+            },
+        });
+    }
+    // Dynamic batch attendance create
+    function dynamicBatchAttendance(element) {
+        batch = element.val()
+        if (batch === 'dynamic_create') {
+            var parentForm = element.parents().closest("form");
+            previous_url = parentForm.data('url');
+            $('#dynamicCreateBatchAttendanceSpan').attr("hx-vals", `{"previous_url":"${previous_url}"}`)
+            $('#dynamicCreateBatchAttendanceSpan').click();
+            element.val('').change();
+        }
+    }
+
+    // Batch title change
+    function batchTitleChange(element) {
+        console.log(element)
+        title = $(element).val()
+        batchId = $(element).data('id')
+        $('#updateTitleSpan').attr("hx-vals", `{"batch_id":"${batchId}","title":"${title}"}`)
+        $('#updateTitleSpan').click()
+    }
+</script>
 
 {% endblock content %}

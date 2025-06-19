@@ -1,5 +1,5 @@
 """
-horilla_automation/methods/serialize.py
+terrain_automation/methods/serialize.py
 """
 
 from django import forms

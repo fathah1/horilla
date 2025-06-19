@@ -12,9 +12,7 @@ urlpatterns = [
     path("refresh/<int:pk>/", views.refresh_token, name="refresh_outlook_token"),
     path("callback/", views.outlook_callback, name="outlook_callback"),
     path("send_email/", views.send_outlook_email, name="send_email"),
-    path(
-        "view-outlook-servers/", views.view_outlook_records, name="outlook_view_records"
-    ),
+    path("view-outlook-servers/", views.view_outlook_records, name="outlook_view_records"),
     path("outlook-server-nav/", cbv.ServerNav.as_view(), name="outlook_server_nav"),
     path("outlook-server-list/", cbv.ServerList.as_view(), name="outlook_server_list"),
     path(

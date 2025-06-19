@@ -1,5 +1,5 @@
 """
-horilla_automation/signals.py
+terrain_automation/signals.py
 
 """
 
